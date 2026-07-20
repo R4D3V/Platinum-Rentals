@@ -9,7 +9,6 @@ import {
   Copy,
   Loader2,
   User,
-  RefreshCw,
   CheckSquare,
   Square,
 } from "lucide-react";
@@ -26,7 +25,6 @@ export default function AdminPropertiesPage() {
   const [properties, setProperties] = useState<Property[]>([]);
   const [users, setUsers] = useState<UserInfo[]>([]);
   const [loading, setLoading] = useState(true);
-  const [resequencing, setResequencing] = useState(false);
   const [activeType, setActiveType] = useState<string | null>(null);
   const [activeArea, setActiveArea] = useState<string | null>(null);
   const [activeStatus, setActiveStatus] = useState<string | null>(null);
@@ -130,17 +128,6 @@ export default function AdminPropertiesPage() {
     await fetchData();
   }
 
-  async function handleResequence() {
-    if (!confirm("Re-assign all property IDs sequentially (PR-1000, PR-1001, ...)?")) return;
-    setResequencing(true);
-    try {
-      await fetch("/api/admin/properties/resequence", { method: "POST" });
-      await fetchData();
-    } finally {
-      setResequencing(false);
-    }
-  }
-
   return (
     <div>
       <div className="flex items-center justify-between gap-4">
@@ -151,15 +138,6 @@ export default function AdminPropertiesPage() {
           </p>
         </div>
         <div className="flex items-center gap-2">
-          <button
-            onClick={handleResequence}
-            disabled={resequencing}
-            className="btn-neu flex items-center gap-2 rounded-xl px-4 py-2.5 text-sm font-semibold"
-            style={{ color: "var(--color-ink-soft)" }}
-          >
-            <RefreshCw size={14} className={resequencing ? "animate-spin" : ""} />
-            Resequence
-          </button>
           <Link
             href="/admin/properties/new"
             className="btn-neu-accent flex items-center gap-2 rounded-xl px-4 py-2.5 text-sm font-semibold text-white"
@@ -236,102 +214,181 @@ export default function AdminPropertiesPage() {
               {properties.length === 0 ? "No properties yet" : "No properties match the selected filters"}
             </p>
           ) : (
-        <div className="mt-4 overflow-x-auto">
-          <table className="w-full text-left text-sm">
-            <thead>
-              <tr style={{ color: "var(--color-ink-faint)" }}>
-                <th className="pb-3 pr-2 w-10">
-                  <button onClick={toggleSelectAll} className="flex items-center">
-                    {allFilteredSelected ? (
-                      <CheckSquare size={16} style={{ color: "var(--color-accent)" }} />
-                    ) : (
-                      <Square size={16} />
-                    )}
-                  </button>
-                </th>
-                <th className="pb-3 pr-4 font-semibold">Title</th>
-                <th className="pb-3 pr-4 font-semibold">Landlord</th>
-                <th className="pb-3 pr-4 font-semibold">Type</th>
-                <th className="pb-3 pr-4 font-semibold">Price</th>
-                <th className="pb-3 pr-4 font-semibold">Area</th>
-                <th className="pb-3 pr-4 font-semibold">Status</th>
-                <th className="pb-3 font-semibold">Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {filtered.map((p) => (
-                <tr
-                  key={p.id}
-                  className="border-t"
-                  style={{ borderColor: "var(--color-shadow-dark)" }}
-                >
-                  <td className="py-3 pr-2">
-                    <button onClick={() => toggleSelect(p.id)} className="flex items-center">
-                      {selectedIds.has(p.id) ? (
-                        <CheckSquare size={16} style={{ color: "var(--color-accent)" }} />
-                      ) : (
-                        <Square size={16} style={{ color: "var(--color-ink-faint)" }} />
-                      )}
-                    </button>
-                  </td>
-                  <td className="py-3 pr-4 font-medium">{p.title}</td>
-                  <td className="py-3 pr-4" style={{ color: "var(--color-ink-soft)" }}>
-                    <span className="inline-flex items-center gap-1">
-                      <User size={11} />
-                      {userMap.get(p.landlordId ?? "") || "—"}
-                    </span>
-                  </td>
-                  <td className="py-3 pr-4" style={{ color: "var(--color-ink-soft)" }}>{p.type}</td>
-                  <td className="py-3 pr-4" style={{ color: "var(--color-ink-soft)" }}>
-                    UGX {(p.price / 1000000).toFixed(1)}M
-                  </td>
-                  <td className="py-3 pr-4" style={{ color: "var(--color-ink-soft)" }}>{p.area}</td>
-                  <td
-                    className="py-3 pr-4 font-semibold"
-                    style={{
-                      color:
-                        p.status === "Available"
-                          ? "var(--color-accent)"
-                          : p.status === "Let"
-                            ? "#059669"
-                            : "#d97706",
-                    }}
-                  >
-                    {p.status}
-                  </td>
-                  <td className="py-3">
-                    <div className="flex gap-2">
-                      <Link
-                        href={`/admin/properties/${p.id}`}
-                        className="icon-chip flex items-center gap-1.5 rounded-xl px-3 py-1.5 text-xs font-semibold"
-                        style={{ color: "var(--color-ink-soft)" }}
-                      >
-                        <Pencil size={13} />
-                        Edit
-                      </Link>
-                      <button
-                        onClick={() => handleDuplicate(p)}
-                        className="icon-chip flex items-center gap-1.5 rounded-xl px-3 py-1.5 text-xs font-semibold"
-                        style={{ color: "var(--color-ink-soft)" }}
-                      >
-                        <Copy size={13} />
-                        Duplicate
+          <div className="mt-4">
+            <div className="hidden overflow-x-auto md:block">
+              <table className="w-full text-left text-sm">
+                <thead>
+                  <tr style={{ color: "var(--color-ink-faint)" }}>
+                    <th className="pb-3 pr-2 w-10">
+                      <button onClick={toggleSelectAll} className="flex items-center">
+                        {allFilteredSelected ? (
+                          <CheckSquare size={16} style={{ color: "var(--color-accent)" }} />
+                        ) : (
+                          <Square size={16} />
+                        )}
                       </button>
-                      <button
-                        onClick={() => handleDelete(p.id)}
-                        className="icon-chip flex items-center gap-1.5 rounded-xl px-3 py-1.5 text-xs font-semibold"
-                        style={{ color: "#dc2626" }}
+                    </th>
+                    <th className="pb-3 pr-4 font-semibold">Title</th>
+                    <th className="pb-3 pr-4 font-semibold">Landlord</th>
+                    <th className="pb-3 pr-4 font-semibold">Type</th>
+                    <th className="pb-3 pr-4 font-semibold">Price</th>
+                    <th className="pb-3 pr-4 font-semibold">Area</th>
+                    <th className="pb-3 pr-4 font-semibold">Status</th>
+                    <th className="pb-3 font-semibold">Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {filtered.map((p) => (
+                    <tr
+                      key={p.id}
+                      className="border-t"
+                      style={{ borderColor: "var(--color-shadow-dark)" }}
+                    >
+                      <td className="py-3 pr-2">
+                        <button onClick={() => toggleSelect(p.id)} className="flex items-center">
+                          {selectedIds.has(p.id) ? (
+                            <CheckSquare size={16} style={{ color: "var(--color-accent)" }} />
+                          ) : (
+                            <Square size={16} style={{ color: "var(--color-ink-faint)" }} />
+                          )}
+                        </button>
+                      </td>
+                      <td className="py-3 pr-4 font-medium">{p.title}</td>
+                      <td className="py-3 pr-4" style={{ color: "var(--color-ink-soft)" }}>
+                        <span className="inline-flex items-center gap-1">
+                          <User size={11} />
+                          {userMap.get(p.landlordId ?? "") || "—"}
+                        </span>
+                      </td>
+                      <td className="py-3 pr-4" style={{ color: "var(--color-ink-soft)" }}>{p.type}</td>
+                      <td className="py-3 pr-4" style={{ color: "var(--color-ink-soft)" }}>
+                        UGX {(p.price / 1000000).toFixed(1)}M
+                      </td>
+                      <td className="py-3 pr-4" style={{ color: "var(--color-ink-soft)" }}>{p.area}</td>
+                      <td
+                        className="py-3 pr-4 font-semibold"
+                        style={{
+                          color:
+                            p.status === "Available"
+                              ? "var(--color-accent)"
+                              : p.status === "Let"
+                                ? "#059669"
+                                : "#d97706",
+                        }}
                       >
-                        <Trash2 size={13} />
-                        Delete
-                      </button>
-                    </div>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+                        {p.status}
+                      </td>
+                      <td className="py-3">
+                        <div className="flex gap-2">
+                          <Link
+                            href={`/admin/properties/${p.id}`}
+                            className="icon-chip flex items-center gap-1.5 rounded-xl px-3 py-1.5 text-xs font-semibold"
+                            style={{ color: "var(--color-ink-soft)" }}
+                          >
+                            <Pencil size={13} />
+                            Edit
+                          </Link>
+                          <button
+                            onClick={() => handleDuplicate(p)}
+                            className="icon-chip flex items-center gap-1.5 rounded-xl px-3 py-1.5 text-xs font-semibold"
+                            style={{ color: "var(--color-ink-soft)" }}
+                          >
+                            <Copy size={13} />
+                            Duplicate
+                          </button>
+                          <button
+                            onClick={() => handleDelete(p.id)}
+                            className="icon-chip flex items-center gap-1.5 rounded-xl px-3 py-1.5 text-xs font-semibold"
+                            style={{ color: "#dc2626" }}
+                          >
+                            <Trash2 size={13} />
+                            Delete
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
             </div>
+
+            <div className="flex flex-col gap-3 md:hidden">
+              {filtered.map((p) => (
+                <div
+                  key={p.id}
+                  className="surface-raised rounded-2xl p-4"
+                  style={{ border: selectedIds.has(p.id) ? "2px solid var(--color-accent)" : "none" }}
+                >
+                  <div className="flex items-start justify-between gap-3">
+                    <div className="flex items-start gap-3 min-w-0">
+                      <button onClick={() => toggleSelect(p.id)} className="mt-0.5 shrink-0">
+                        {selectedIds.has(p.id) ? (
+                          <CheckSquare size={18} style={{ color: "var(--color-accent)" }} />
+                        ) : (
+                          <Square size={18} style={{ color: "var(--color-ink-faint)" }} />
+                        )}
+                      </button>
+                      <div className="min-w-0">
+                        <p className="text-sm font-bold leading-snug break-words">{p.title}</p>
+                        <p className="mt-1 text-xs" style={{ color: "var(--color-ink-soft)" }}>
+                          <span className="inline-flex items-center gap-1">
+                            <User size={11} />
+                            {userMap.get(p.landlordId ?? "") || "—"}
+                          </span>
+                        </p>
+                      </div>
+                    </div>
+                    <span
+                      className="shrink-0 rounded-full px-2.5 py-0.5 text-[10px] font-bold text-white"
+                      style={{
+                        background:
+                          p.status === "Available"
+                            ? "var(--color-accent)"
+                            : p.status === "Let"
+                              ? "#059669"
+                              : "#d97706",
+                      }}
+                    >
+                      {p.status}
+                    </span>
+                  </div>
+
+                  <div className="mt-3 flex flex-wrap gap-x-4 gap-y-1 text-xs" style={{ color: "var(--color-ink-soft)" }}>
+                    <span>{p.type}</span>
+                    <span>UGX {(p.price / 1000000).toFixed(1)}M</span>
+                    <span>{p.area}</span>
+                  </div>
+
+                  <div className="mt-3 flex flex-wrap gap-2">
+                    <Link
+                      href={`/admin/properties/${p.id}`}
+                      className="icon-chip flex items-center gap-1.5 rounded-xl px-3 py-1.5 text-xs font-semibold"
+                      style={{ color: "var(--color-ink-soft)" }}
+                    >
+                      <Pencil size={12} />
+                      Edit
+                    </Link>
+                    <button
+                      onClick={() => handleDuplicate(p)}
+                      className="icon-chip flex items-center gap-1.5 rounded-xl px-3 py-1.5 text-xs font-semibold"
+                      style={{ color: "var(--color-ink-soft)" }}
+                    >
+                      <Copy size={12} />
+                      Duplicate
+                    </button>
+                    <button
+                      onClick={() => handleDelete(p.id)}
+                      className="icon-chip flex items-center gap-1.5 rounded-xl px-3 py-1.5 text-xs font-semibold"
+                      style={{ color: "#dc2626" }}
+                    >
+                      <Trash2 size={12} />
+                      Delete
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
           )}
         </>
       )}

@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 import Link from "next/link";
 import { useSession } from "@/lib/auth-client";
 import {
@@ -26,6 +26,7 @@ export default function AdminLayout({
   children: React.ReactNode;
 }) {
   const router = useRouter();
+  const pathname = usePathname();
   const { data: session, isPending } = useSession();
 
   useEffect(() => {
@@ -56,6 +57,7 @@ export default function AdminLayout({
       </Link>
 
       <div className="flex gap-6">
+        {/* Desktop sidebar */}
         <aside className="hidden w-56 shrink-0 flex-col gap-2 lg:flex">
           {SIDEBAR_LINKS.map((link) => (
             <Link
@@ -92,6 +94,30 @@ export default function AdminLayout({
         </aside>
 
         <div className="min-w-0 flex-1">
+          {/* Mobile nav tabs */}
+          <nav className="mb-4 flex gap-2 overflow-x-auto lg:hidden">
+            {SIDEBAR_LINKS.map((link) => {
+              const isActive =
+                link.href === "/admin"
+                  ? pathname === "/admin"
+                  : pathname.startsWith(link.href);
+              return (
+                <Link
+                  key={link.href}
+                  href={link.href}
+                  className={`flex shrink-0 items-center gap-2 rounded-xl px-4 py-2.5 text-sm font-bold transition ${
+                    isActive
+                      ? "bg-[var(--color-accent)] text-white"
+                      : "surface-raised"
+                  }`}
+                >
+                  <link.icon size={16} />
+                  {link.label}
+                </Link>
+              );
+            })}
+          </nav>
+
           <div className="surface-raised-lg rounded-3xl p-6 sm:p-8">
             {children}
           </div>
