@@ -3,7 +3,11 @@ import { neon } from "@neondatabase/serverless";
 import * as schema from "./db-schema";
 
 if (typeof process.loadEnvFile === "function") {
-  process.loadEnvFile(".env.local");
+  try {
+    process.loadEnvFile(".env.local");
+  } catch {
+    // .env.local doesn't exist (e.g., on Vercel)
+  }
 }
 
 const sql = neon(process.env.DATABASE_URL!);
