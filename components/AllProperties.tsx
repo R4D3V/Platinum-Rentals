@@ -2,9 +2,10 @@ import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import FadeIn from "@/components/FadeIn";
 import PropertyCard from "@/components/PropertyCard";
-import { SAMPLE_PROPERTIES } from "@/lib/data";
+import { getAllProperties } from "@/lib/data";
 
-export default function AllProperties() {
+export default async function AllProperties() {
+  const properties = await getAllProperties();
   return (
     <section className="px-4 py-16 sm:px-6 lg:px-10" style={{ background: "var(--color-surface-alt)" }}>
       <div className="mx-auto max-w-6xl">
@@ -33,7 +34,7 @@ export default function AllProperties() {
         </FadeIn>
 
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {SAMPLE_PROPERTIES.map((property, i) => (
+          {properties.map((property, i) => (
             <FadeIn key={property.id} delay={i * 80}>
               <PropertyCard property={property} />
             </FadeIn>

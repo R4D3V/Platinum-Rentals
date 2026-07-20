@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { BedDouble, Bath, MapPin } from "lucide-react";
+import { BedDouble, Bath, MapPin, ImageIcon } from "lucide-react";
 import type { Property } from "@/lib/data";
 import { formatPrice } from "@/lib/data";
 
@@ -9,14 +9,24 @@ export default function PropertyCard({ property }: { property: Property }) {
   return (
     <Link href={`/properties/${property.id}`}>
       <div className="group surface-raised flex flex-col overflow-hidden rounded-3xl transition-transform duration-200 hover:scale-[1.02]">
-        {/* Image placeholder */}
-        <div
-          className="relative flex h-56 items-center justify-center"
-          style={{ background: property.gradient }}
-        >
-          <span className="rounded-full bg-white/20 px-4 py-2 text-xs font-bold uppercase tracking-wider text-white backdrop-blur-sm">
-            {property.type}
-          </span>
+        {/* Image */}
+        <div className="relative flex h-56 items-center justify-center overflow-hidden">
+          {property.images[0] ? (
+            <img
+              src={property.images[0]}
+              alt={property.title}
+              className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
+            />
+          ) : (
+            <div className="flex h-full w-full items-center justify-center bg-slate-200">
+              <div className="flex flex-col items-center gap-2 opacity-50">
+                <ImageIcon size={32} className="text-slate-400" />
+                <span className="rounded-full bg-white/60 px-3 py-1 text-xs font-bold uppercase tracking-wider text-slate-500">
+                  {property.type}
+                </span>
+              </div>
+            </div>
+          )}
           {property.status !== "Available" && (
             <span
               className="absolute right-4 top-4 rounded-full px-3 py-1 text-xs font-bold uppercase tracking-wide text-white"
@@ -59,7 +69,7 @@ export default function PropertyCard({ property }: { property: Property }) {
               className="text-xs"
               style={{ color: "var(--color-ink-faint)" }}
             >
-              {property.area}, Kampala
+              {property.area}
             </span>
           </div>
 

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo, useCallback } from "react";
+import { useState, useMemo, useEffect } from "react";
 import {
   Search,
   SlidersHorizontal,
@@ -11,19 +11,16 @@ import {
   Tag,
   DollarSign,
   RotateCcw,
+  ChevronLeft,
+  ChevronRight,
 } from "lucide-react";
 import FadeIn from "@/components/FadeIn";
 import PropertyCard from "@/components/PropertyCard";
-import { SAMPLE_PROPERTIES, type Property } from "@/lib/data";
+import type { Property } from "@/lib/data";
 
 const TYPES = ["All", "Apartment", "Villa", "Townhouse", "Studio", "Commercial"] as const;
 const STATUSES = ["All", "Available", "Let", "Under Offer"] as const;
 const BEDROOM_OPTIONS = ["All", "Studio", "1", "2", "3", "4+"] as const;
-
-const AREAS = [
-  "All",
-  ...Array.from(new Set(SAMPLE_PROPERTIES.map((p) => p.area))),
-] as const;
 
 interface Filters {
   type: string;
@@ -50,18 +47,6 @@ function matchBedrooms(property: Property, filter: string): boolean {
   return property.bedrooms === Number(filter);
 }
 
-function filterProperties(filters: Filters) {
-  return SAMPLE_PROPERTIES.filter((p) => {
-    if (filters.type !== "All" && p.type !== filters.type) return false;
-    if (filters.area !== "All" && p.area !== filters.area) return false;
-    if (filters.status !== "All" && p.status !== filters.status) return false;
-    if (!matchBedrooms(p, filters.bedrooms)) return false;
-    if (filters.minPrice && p.price < Number(filters.minPrice) * 1000000) return false;
-    if (filters.maxPrice && p.price > Number(filters.maxPrice) * 1000000) return false;
-    return true;
-  });
-}
-
 function hasActiveFilters(f: Filters) {
   return (
     f.type !== "All" ||
@@ -74,30 +59,76 @@ function hasActiveFilters(f: Filters) {
 }
 
 export default function PropertySearchFilter() {
+  const [properties, setProperties] = useState<Property[]>([]);
+  const [loading, setLoading] = useState(true);
   const [draft, setDraft] = useState<Filters>(ALL_FILTERS);
   const [applied, setApplied] = useState<Filters>(ALL_FILTERS);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [page, setPage] = useState(1);
+  const [pageSize, setPageSize] = useState(30);
 
-  const filtered = useMemo(() => filterProperties(applied), [applied]);
+  useEffect(() => {
+    const mq = window.matchMedia("(max-width: 639px)");
+    setPageSize(mq.matches ? 20 : 30);
+    const handler = (e: MediaQueryListEvent) => setPageSize(e.matches ? 20 : 30);
+    mq.addEventListener("change", handler);
+    return () => mq.removeEventListener("change", handler);
+  }, []);
+
+  useEffect(() => {
+    fetch("/api/properties")
+      .then((r) => r.json())
+      .then((data: Property[]) => {
+        setProperties(data);
+        setLoading(false);
+      });
+  }, []);
+
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }, [page]);
+
+  const areas = useMemo(
+    () => ["All", ...Array.from(new Set(properties.map((p) => p.area)))],
+    [properties],
+  );
+
+  const filtered = useMemo(
+    () =>
+      properties.filter((p) => {
+        if (applied.type !== "All" && p.type !== applied.type) return false;
+        if (applied.area !== "All" && p.area !== applied.area) return false;
+        if (applied.status !== "All" && p.status !== applied.status) return false;
+        if (!matchBedrooms(p, applied.bedrooms)) return false;
+        if (applied.minPrice && p.price < Number(applied.minPrice) * 1000000) return false;
+        if (applied.maxPrice && p.price > Number(applied.maxPrice) * 1000000) return false;
+        return true;
+      }),
+    [properties, applied],
+  );
+
   const appliedHasFilters = hasActiveFilters(applied);
   const draftHasFilters = hasActiveFilters(draft);
 
-  const updateDraft = useCallback(
-    (key: keyof Filters, value: string) =>
-      setDraft((prev) => ({ ...prev, [key]: value })),
-    []
-  );
+  function updateDraft(key: keyof Filters, value: string) {
+    setDraft((prev) => ({ ...prev, [key]: value }));
+  }
 
   function handleSearch(e: React.FormEvent) {
     e.preventDefault();
     setApplied({ ...draft });
+    setPage(1);
     setMobileOpen(false);
   }
 
   function resetAll() {
     setDraft(ALL_FILTERS);
     setApplied(ALL_FILTERS);
+    setPage(1);
   }
+
+  const totalPages = Math.max(1, Math.ceil(filtered.length / pageSize));
+  const paginated = filtered.slice((page - 1) * pageSize, page * pageSize);
 
   function removeFilter(key: keyof Filters) {
     const next = { ...applied, [key]: key === "minPrice" || key === "maxPrice" ? "" : "All" };
@@ -185,7 +216,7 @@ export default function PropertySearchFilter() {
                   onChange={(e) => updateDraft("area", e.target.value)}
                   className={selectClass}
                 >
-                  {AREAS.map((a) => (
+                  {areas.map((a) => (
                     <option key={a} value={a}>{a === "All" ? "All Areas" : a}</option>
                   ))}
                 </select>
@@ -283,7 +314,10 @@ export default function PropertySearchFilter() {
       <FadeIn delay={50}>
         <div className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
           <p className="text-sm font-medium" style={{ color: "var(--color-ink-faint)" }}>
-            {filtered.length} propert{filtered.length === 1 ? "y" : "ies"} found
+            {loading
+              ? "Loading..."
+              : `${filtered.length} propert${filtered.length === 1 ? "y" : "ies"} found` +
+                (totalPages > 1 ? ` — Page ${page} of ${totalPages}` : "")}
           </p>
           {appliedHasFilters && (
             <div className="flex flex-wrap items-center gap-2">
@@ -323,15 +357,82 @@ export default function PropertySearchFilter() {
         </div>
       </FadeIn>
 
-      {/* Property grid or empty state */}
-      {filtered.length > 0 ? (
+      {/* Property grid or loading / empty state */}
+      {loading ? (
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {filtered.map((property, i) => (
-            <FadeIn key={property.id} delay={i * 80}>
-              <PropertyCard property={property} />
-            </FadeIn>
+          {Array.from({ length: 6 }).map((_, i) => (
+            <div key={i} className="surface-raised flex flex-col overflow-hidden rounded-3xl">
+              <div className="h-56 animate-pulse bg-slate-200" />
+              <div className="flex flex-1 flex-col p-6 gap-3">
+                <div className="h-4 w-24 animate-pulse rounded bg-slate-200" />
+                <div className="h-5 w-48 animate-pulse rounded bg-slate-200" />
+                <div className="h-3 w-32 animate-pulse rounded bg-slate-200" />
+                <div className="mt-auto flex items-center gap-4 pt-4">
+                  <div className="h-4 w-16 animate-pulse rounded bg-slate-200" />
+                  <div className="h-4 w-16 animate-pulse rounded bg-slate-200" />
+                </div>
+              </div>
+            </div>
           ))}
         </div>
+      ) : paginated.length > 0 ? (
+        <>
+          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            {paginated.map((property, i) => (
+              <FadeIn key={property.id} delay={i * 80}>
+                <PropertyCard property={property} />
+              </FadeIn>
+            ))}
+          </div>
+
+          {/* Pagination */}
+          {totalPages > 1 && (
+            <FadeIn delay={200}>
+              <div className="mt-10 flex items-center justify-center gap-2">
+                <button
+                  onClick={() => setPage((p) => Math.max(1, p - 1))}
+                  disabled={page === 1}
+                  className="btn-neu flex h-10 w-10 items-center justify-center rounded-xl disabled:opacity-30"
+                >
+                  <ChevronLeft size={16} />
+                </button>
+
+                {Array.from({ length: totalPages }, (_, i) => i + 1)
+                  .filter((p) => {
+                    if (totalPages <= 7) return true;
+                    if (p === 1 || p === totalPages) return true;
+                    if (Math.abs(p - page) <= 1) return true;
+                    return false;
+                  })
+                  .map((p, idx, arr) => (
+                    <span key={p} className="flex items-center gap-1">
+                      {idx > 0 && arr[idx - 1] !== p - 1 && (
+                        <span className="px-1 text-xs" style={{ color: "var(--color-ink-faint)" }}>...</span>
+                      )}
+                      <button
+                        onClick={() => setPage(p)}
+                        className={`flex h-10 w-10 items-center justify-center rounded-xl text-sm font-bold transition ${
+                          page === p
+                            ? "bg-[var(--color-accent)] text-white"
+                            : "btn-neu"
+                        }`}
+                      >
+                        {p}
+                      </button>
+                    </span>
+                  ))}
+
+                <button
+                  onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
+                  disabled={page === totalPages}
+                  className="btn-neu flex h-10 w-10 items-center justify-center rounded-xl disabled:opacity-30"
+                >
+                  <ChevronRight size={16} />
+                </button>
+              </div>
+            </FadeIn>
+          )}
+        </>
       ) : (
         <FadeIn>
           <div className="surface-pressed flex flex-col items-center rounded-3xl px-6 py-16 text-center">

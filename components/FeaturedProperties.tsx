@@ -2,10 +2,11 @@ import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import FadeIn from "@/components/FadeIn";
 import PropertyCard from "@/components/PropertyCard";
-import { SAMPLE_PROPERTIES } from "@/lib/data";
+import { getAllProperties } from "@/lib/data";
 
-export default function FeaturedProperties() {
-  const featured = SAMPLE_PROPERTIES.filter((p) => p.status === "Available").slice(0, 3);
+export default async function FeaturedProperties() {
+  const all = await getAllProperties();
+  const featured = all.filter((p) => p.status === "Available").slice(0, 3);
 
   return (
     <section className="px-4 py-16 sm:px-6 lg:px-10">

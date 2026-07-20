@@ -3,9 +3,11 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useState, useEffect } from "react";
-import { Menu, X, Lock, Sun, Moon } from "lucide-react";
+import { Menu, X, Lock, LogOut, Sun, Moon, LayoutDashboard } from "lucide-react";
+import { useSession, signOut } from "@/lib/auth-client";
 
 const NAV_LINKS = [
+  { label: "Home", href: "/" },
   { label: "About", href: "/about" },
   { label: "Services", href: "/services" },
   { label: "Why Us", href: "/why-us" },
@@ -16,10 +18,13 @@ const NAV_LINKS = [
 export default function Header() {
   const [open, setOpen] = useState(false);
   const [dark, setDark] = useState(false);
+  const { data: session } = useSession();
 
   useEffect(() => {
     const saved = localStorage.getItem("theme");
-    const prefersDark = saved === "dark" || (!saved && window.matchMedia("(prefers-color-scheme: dark)").matches);
+    const prefersDark =
+      saved === "dark" ||
+      (!saved && window.matchMedia("(prefers-color-scheme: dark)").matches);
     setDark(prefersDark);
     document.documentElement.classList.toggle("dark", prefersDark);
   }, []);
@@ -67,14 +72,47 @@ export default function Header() {
           >
             {dark ? <Sun size={18} /> : <Moon size={18} />}
           </button>
-          <Link
-            href="/admin/login"
-            className="flex items-center gap-2 rounded-xl icon-chip px-4 py-2 text-sm font-semibold"
-            style={{ color: "var(--color-ink)" }}
-          >
-            <Lock size={16} strokeWidth={2.25} style={{ color: "var(--color-accent)" }} />
-            Sign In
-          </Link>
+          {session ? (
+            <>
+              <Link
+                href="/dashboard"
+                className="flex items-center gap-2 rounded-xl icon-chip px-4 py-2 text-sm font-semibold"
+                style={{ color: "var(--color-ink)" }}
+              >
+                <LayoutDashboard
+                  size={16}
+                  strokeWidth={2.25}
+                  style={{ color: "var(--color-accent)" }}
+                />
+                Dashboard
+              </Link>
+              <button
+                onClick={() => signOut()}
+                className="flex items-center gap-2 rounded-xl icon-chip px-4 py-2 text-sm font-semibold"
+                style={{ color: "var(--color-ink)" }}
+              >
+                <LogOut
+                  size={16}
+                  strokeWidth={2.25}
+                  style={{ color: "var(--color-accent)" }}
+                />
+                Sign Out
+              </button>
+            </>
+          ) : (
+            <Link
+              href="/sign-in"
+              className="flex items-center gap-2 rounded-xl icon-chip px-4 py-2 text-sm font-semibold"
+              style={{ color: "var(--color-ink)" }}
+            >
+              <Lock
+                size={16}
+                strokeWidth={2.25}
+                style={{ color: "var(--color-accent)" }}
+              />
+              Sign In
+            </Link>
+          )}
           <Link
             href="/landlord"
             className="btn-neu-accent rounded-xl px-5 py-2.5 text-sm font-semibold text-white"
@@ -115,15 +153,52 @@ export default function Header() {
               {dark ? <Sun size={18} /> : <Moon size={18} />}
               {dark ? "Light Mode" : "Dark Mode"}
             </button>
-            <Link
-              href="/admin/login"
-              onClick={() => setOpen(false)}
-              className="flex items-center gap-2 rounded-xl px-4 py-3 text-sm font-medium"
-              style={{ color: "var(--color-ink-soft)" }}
-            >
-              <Lock size={16} strokeWidth={2.25} style={{ color: "var(--color-accent)" }} />
-              Sign In
-            </Link>
+            {session ? (
+              <>
+                <Link
+                  href="/dashboard"
+                  onClick={() => setOpen(false)}
+                  className="flex items-center gap-2 rounded-xl px-4 py-3 text-sm font-medium"
+                  style={{ color: "var(--color-ink-soft)" }}
+                >
+                  <LayoutDashboard
+                    size={16}
+                    strokeWidth={2.25}
+                    style={{ color: "var(--color-accent)" }}
+                  />
+                  Dashboard
+                </Link>
+                <button
+                  onClick={() => {
+                    signOut();
+                    setOpen(false);
+                  }}
+                  className="flex items-center gap-2 rounded-xl px-4 py-3 text-left text-sm font-medium"
+                  style={{ color: "var(--color-ink-soft)" }}
+                >
+                  <LogOut
+                    size={16}
+                    strokeWidth={2.25}
+                    style={{ color: "var(--color-accent)" }}
+                  />
+                  Sign Out
+                </button>
+              </>
+            ) : (
+              <Link
+                href="/sign-in"
+                onClick={() => setOpen(false)}
+                className="flex items-center gap-2 rounded-xl px-4 py-3 text-sm font-medium"
+                style={{ color: "var(--color-ink-soft)" }}
+              >
+                <Lock
+                  size={16}
+                  strokeWidth={2.25}
+                  style={{ color: "var(--color-accent)" }}
+                />
+                Sign In
+              </Link>
+            )}
             <Link
               href="/landlord"
               onClick={() => setOpen(false)}

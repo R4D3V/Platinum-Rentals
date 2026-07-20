@@ -15,6 +15,8 @@ export interface Property {
   status: "Available" | "Let" | "Under Offer";
   availableFrom?: string;
   gradient: string;
+  images: string[];
+  landlordId?: string;
 }
 
 export const SAMPLE_PROPERTIES: Property[] = [
@@ -45,6 +47,7 @@ export const SAMPLE_PROPERTIES: Property[] = [
     status: "Available",
     availableFrom: "August 2026",
     gradient: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
+    images: [],
   },
   {
     id: "bugolobi-family-3br",
@@ -73,6 +76,7 @@ export const SAMPLE_PROPERTIES: Property[] = [
     status: "Available",
     availableFrom: "September 2026",
     gradient: "linear-gradient(135deg, #f093fb 0%, #f5576c 100%)",
+    images: [],
   },
   {
     id: "nakasero-studio",
@@ -100,6 +104,7 @@ export const SAMPLE_PROPERTIES: Property[] = [
     ],
     status: "Available",
     gradient: "linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)",
+    images: [],
   },
   {
     id: "munyonyo-waterfront-4br",
@@ -127,6 +132,7 @@ export const SAMPLE_PROPERTIES: Property[] = [
     ],
     status: "Under Offer",
     gradient: "linear-gradient(135deg, #43e97b 0%, #38f9d7 100%)",
+    images: [],
   },
   {
     id: "ntinda-2br-modern",
@@ -154,6 +160,7 @@ export const SAMPLE_PROPERTIES: Property[] = [
     ],
     status: "Available",
     gradient: "linear-gradient(135deg, #fa709a 0%, #fee140 100%)",
+    images: [],
   },
   {
     id: "kisaasi-townhouse",
@@ -181,17 +188,105 @@ export const SAMPLE_PROPERTIES: Property[] = [
     ],
     status: "Available",
     gradient: "linear-gradient(135deg, #a18cd1 0%, #fbc2eb 100%)",
+    images: [],
   },
 ];
 
-export function getPropertyById(id: string): Property | undefined {
-  return SAMPLE_PROPERTIES.find((p) => p.id === id);
+export async function getAllProperties(): Promise<Property[]> {
+  const { db } = await import("./db");
+  const { property: propertyTable } = await import("./db-schema");
+  const rows = await db.select().from(propertyTable);
+  return rows.map((row) => ({
+    id: row.id,
+    propertyId: row.propertyId,
+    title: row.title,
+    type: row.type as Property["type"],
+    price: row.price,
+    bedrooms: row.bedrooms,
+    bathrooms: row.bathrooms,
+    parking: row.parking,
+    size: row.size,
+    location: row.location,
+    area: row.area,
+    description: row.description,
+    features: row.features,
+    status: row.status as Property["status"],
+    availableFrom: row.availableFrom ?? undefined,
+    gradient: row.gradient,
+    images: row.images ?? [],
+    landlordId: row.landlordId ?? undefined,
+  }));
 }
 
-export function getSimilarProperties(property: Property): Property[] {
-  return SAMPLE_PROPERTIES.filter(
-    (p) => p.id !== property.id && (p.area === property.area || p.type === property.type)
-  ).slice(0, 3);
+export async function getPropertyById(id: string): Promise<Property | undefined> {
+  const { db } = await import("./db");
+  const { property: propertyTable } = await import("./db-schema");
+  const { eq } = await import("drizzle-orm");
+  const rows = await db
+    .select()
+    .from(propertyTable)
+    .where(eq(propertyTable.id, id));
+  const row = rows[0];
+  if (!row) return undefined;
+  return {
+    id: row.id,
+    propertyId: row.propertyId,
+    title: row.title,
+    type: row.type as Property["type"],
+    price: row.price,
+    bedrooms: row.bedrooms,
+    bathrooms: row.bathrooms,
+    parking: row.parking,
+    size: row.size,
+    location: row.location,
+    area: row.area,
+    description: row.description,
+    features: row.features,
+    status: row.status as Property["status"],
+    availableFrom: row.availableFrom ?? undefined,
+    gradient: row.gradient,
+    images: row.images ?? [],
+    landlordId: row.landlordId ?? undefined,
+  };
+}
+
+export async function getSimilarProperties(property: Property): Promise<Property[]> {
+  const { db } = await import("./db");
+  const { property: propertyTable } = await import("./db-schema");
+  const { eq, ne, or, and } = await import("drizzle-orm");
+  const rows = await db
+    .select()
+    .from(propertyTable)
+    .where(
+      and(
+        ne(propertyTable.id, property.id),
+        or(
+          eq(propertyTable.area, property.area),
+          eq(propertyTable.type, property.type),
+        ),
+      ),
+    )
+    .limit(3);
+  return rows.map((row) => ({
+    id: row.id,
+    propertyId: row.propertyId,
+    title: row.title,
+    type: row.type as Property["type"],
+    price: row.price,
+    bedrooms: row.bedrooms,
+    bathrooms: row.bathrooms,
+    parking: row.parking,
+    size: row.size,
+    location: row.location,
+    area: row.area,
+    description: row.description,
+    features: row.features,
+    status: row.status as Property["status"],
+    availableFrom: row.availableFrom ?? undefined,
+    gradient: row.gradient,
+    images: row.images ?? [],
+    landlordId: row.landlordId ?? undefined,
+  }));
 }
 
 export function formatPrice(price: number): string {

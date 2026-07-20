@@ -2,12 +2,13 @@ import Link from "next/link";
 import { ArrowRight, MapPin } from "lucide-react";
 import FadeIn from "@/components/FadeIn";
 import { AREAS } from "@/components/AreasWeServe";
-import { SAMPLE_PROPERTIES } from "@/lib/data";
+import { getAllProperties } from "@/lib/data";
 
-export default function ExploreAreasHome() {
+export default async function ExploreAreasHome() {
+  const all = await getAllProperties();
   const areasWithCount = AREAS.map((area) => {
     const name = area.name.split(" & ")[0];
-    const count = SAMPLE_PROPERTIES.filter(
+    const count = all.filter(
       (p) => p.area === name || area.name.includes(p.area)
     ).length;
     return { ...area, count };

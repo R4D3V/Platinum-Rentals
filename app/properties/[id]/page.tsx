@@ -19,14 +19,15 @@ import LandlordCta from "@/components/LandlordCta";
 import {
   getPropertyById,
   getSimilarProperties,
+  getAllProperties,
   formatPrice,
-  SAMPLE_PROPERTIES,
 } from "@/lib/data";
 import { WHATSAPP_NUMBER } from "@/lib/whatsapp";
 import { notFound } from "next/navigation";
 
-export function generateStaticParams() {
-  return SAMPLE_PROPERTIES.map((p) => ({ id: p.id }));
+export async function generateStaticParams() {
+  const all = await getAllProperties();
+  return all.map((p) => ({ id: p.id }));
 }
 
 export async function generateMetadata({
@@ -35,7 +36,7 @@ export async function generateMetadata({
   params: Promise<{ id: string }>;
 }) {
   const { id } = await params;
-  const property = getPropertyById(id);
+  const property = await getPropertyById(id);
   if (!property) return { title: "Property Not Found" };
   return {
     title: `${property.title} | Platinum Rentals`,
@@ -49,24 +50,23 @@ export default async function PropertyDetailPage({
   params: Promise<{ id: string }>;
 }) {
   const { id } = await params;
-  const property = getPropertyById(id);
+  const property = await getPropertyById(id);
   if (!property) notFound();
 
-  const similar = getSimilarProperties(property);
+  const similar = await getSimilarProperties(property);
 
   const whatsappMessage = encodeURIComponent(
     `Hello Platinum Rentals, I'm interested in the property: ${property.title} (${property.area}). Is it still available?`,
   );
 
   const detailRows: [string, string][] = [
-    ["Property ID", property.propertyId],
     ["Type", property.type],
     ["Status", property.status],
     ["Bedrooms", property.bedrooms === 0 ? "Studio" : `${property.bedrooms}`],
     ["Bathrooms", `${property.bathrooms}`],
     ["Parking", `${property.parking} Space${property.parking > 1 ? "s" : ""}`],
     ["Size", `${property.size} sqm`],
-    ["Area", `${property.area}, Kampala`],
+    ["Area", property.area],
     ["Price", formatPrice(property.price)],
   ];
 
@@ -168,7 +168,7 @@ export default async function PropertyDetailPage({
                 className="text-sm"
                 style={{ color: "var(--color-ink-soft)" }}
               >
-                {property.location}, Kampala
+                {property.location}
               </span>
             </div>
 
@@ -195,7 +195,7 @@ export default async function PropertyDetailPage({
             {/* Left — Gallery */}
             <FadeIn direction="left">
               <PropertyGallery
-                gradient={property.gradient}
+                images={property.images}
                 type={property.type}
               />
             </FadeIn>
@@ -354,7 +354,9 @@ export default async function PropertyDetailPage({
                   >
                     {label}
                   </span>
-                  <span className="text-right text-sm font-semibold break-words">{value}</span>
+                  <span className="text-right text-sm font-semibold break-words">
+                    {value}
+                  </span>
                 </div>
               ))}
             </div>
