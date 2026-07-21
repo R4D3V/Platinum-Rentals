@@ -9,6 +9,7 @@ const LINKS = [
   { label: "Why Us", href: "/why-us" },
   { label: "How It Works", href: "/how-it-works" },
   { label: "Contact", href: "/contact" },
+  { label: "Install App", href: "/install" },
 ];
 
 export default function Footer() {

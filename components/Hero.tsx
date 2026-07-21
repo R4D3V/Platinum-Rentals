@@ -34,6 +34,14 @@ export default function Hero() {
   const [typedText, setTypedText] = useState("");
   const [phraseIndex, setPhraseIndex] = useState(0);
   const [isDeleting, setIsDeleting] = useState(false);
+  const [propertyCount, setPropertyCount] = useState<number | null>(null);
+
+  useEffect(() => {
+    fetch("/api/properties/count")
+      .then((r) => r.json())
+      .then((d) => setPropertyCount(d.count))
+      .catch(() => setPropertyCount(0));
+  }, []);
 
   useEffect(() => {
     const currentPhrase = TYPEWRITER_PHRASES[phraseIndex];
@@ -112,7 +120,7 @@ export default function Hero() {
               style={{ color: "var(--color-ink-faint)" }}
             >
               <span>
-                <strong style={{ color: "var(--color-ink)" }}>6</strong>{" "}
+                <strong style={{ color: "var(--color-ink)" }}>{propertyCount ?? "—"}</strong>{" "}
                 Properties listed
               </span>
               <span>

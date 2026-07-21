@@ -82,6 +82,20 @@ export default function PropertySearchFilter() {
         setProperties(data);
         setLoading(false);
       });
+
+    const params = new URLSearchParams(window.location.search);
+    const initial: Partial<Filters> = {};
+    const bedrooms = params.get("bedrooms");
+    if (bedrooms) initial.bedrooms = bedrooms;
+    const type = params.get("type");
+    if (type) initial.type = type;
+    const area = params.get("area");
+    if (area) initial.area = area;
+    if (Object.keys(initial).length > 0) {
+      const merged = { ...ALL_FILTERS, ...initial };
+      setDraft(merged);
+      setApplied(merged);
+    }
   }, []);
 
   useEffect(() => {
@@ -114,9 +128,19 @@ export default function PropertySearchFilter() {
     setDraft((prev) => ({ ...prev, [key]: value }));
   }
 
+  function syncUrl(f: Filters) {
+    const params = new URLSearchParams();
+    if (f.bedrooms !== "All") params.set("bedrooms", f.bedrooms);
+    if (f.type !== "All") params.set("type", f.type);
+    if (f.area !== "All") params.set("area", f.area);
+    const qs = params.toString();
+    window.history.replaceState(null, "", qs ? `/properties?${qs}` : "/properties");
+  }
+
   function handleSearch(e: React.FormEvent) {
     e.preventDefault();
     setApplied({ ...draft });
+    syncUrl(draft);
     setPage(1);
     setMobileOpen(false);
   }
@@ -124,6 +148,7 @@ export default function PropertySearchFilter() {
   function resetAll() {
     setDraft(ALL_FILTERS);
     setApplied(ALL_FILTERS);
+    syncUrl(ALL_FILTERS);
     setPage(1);
   }
 

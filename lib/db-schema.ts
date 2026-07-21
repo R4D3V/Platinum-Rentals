@@ -119,6 +119,22 @@ export const accountRelations = relations(account, ({ one }) => ({
   }),
 }));
 
+export const pushSubscription = pgTable("push_subscription", {
+  id: text("id").primaryKey(),
+  endpoint: text("endpoint").notNull(),
+  keys: text("keys").notNull(),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
+export const notification = pgTable("notification", {
+  id: text("id").primaryKey(),
+  title: text("title").notNull(),
+  message: text("message").notNull(),
+  link: text("link"),
+  read: text("read").default("false").notNull(),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
 export const propertyRelations = relations(property, ({ one }) => ({
   landlord: one(user, {
     fields: [property.landlordId],

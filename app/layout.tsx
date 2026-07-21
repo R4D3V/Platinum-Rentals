@@ -1,7 +1,9 @@
 import type { Metadata } from "next";
 import { Inter, Manrope } from "next/font/google";
+import Script from "next/script";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import PushSubscription from "@/components/PushSubscription";
 import "./globals.css";
 
 const inter = Inter({
@@ -34,6 +36,28 @@ export const metadata: Metadata = {
     url: "https://www.platinumrentals.ug",
     siteName: "Platinum Rentals",
     type: "website",
+  },
+  icons: {
+    icon: [
+      { url: "/favicons/favicon.ico", sizes: "any" },
+      { url: "/favicons/favicon.svg", type: "image/svg+xml" },
+      { url: "/favicons/favicon-16x16.png", sizes: "16x16", type: "image/png" },
+      { url: "/favicons/favicon-32x32.png", sizes: "32x32", type: "image/png" },
+      { url: "/favicons/favicon-48x48.png", sizes: "48x48", type: "image/png" },
+    ],
+    apple: [
+      { url: "/pwa-icons/apple-touch-icon.png", sizes: "180x180", type: "image/png" },
+    ],
+  },
+  manifest: "/manifest.json",
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: "default",
+    title: "Platinum Rentals",
+  },
+  other: {
+    "mobile-web-app-capable": "yes",
+    "theme-color": "#bf1a2c",
   },
 };
 
@@ -103,6 +127,20 @@ export default function RootLayout({
         <Header />
         {children}
         <Footer />
+        <PushSubscription />
+        <Script
+          id="register-sw"
+          strategy="afterInteractive"
+          dangerouslySetInnerHTML={{
+            __html: `
+              if ("serviceWorker" in navigator) {
+                window.addEventListener("load", () => {
+                  navigator.serviceWorker.register("/sw.js");
+                });
+              }
+            `,
+          }}
+        />
       </body>
     </html>
   );

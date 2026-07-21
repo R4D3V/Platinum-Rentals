@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { db } from "@/lib/db";
 import { property } from "@/lib/db-schema";
+import { sendPushNotifications } from "@/lib/notifications";
 
 export async function GET() {
   const rows = await db.select().from(property);
@@ -45,5 +46,19 @@ export async function POST(request: Request) {
       landlordId: body.landlordId ?? null,
     })
     .returning();
-  return NextResponse.json(row[0], { status: 201 });
+
+  const created = row[0];
+  const slug = created.title
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-|-$/g, "")
+    .slice(0, 40);
+
+  sendPushNotifications(
+    `New Listing: ${created.title}`,
+    `${created.type} — UGX ${created.price.toLocaleString("en-UG")}`,
+    `/properties/${slug}`,
+  ).catch(() => {});
+
+  return NextResponse.json(created, { status: 201 });
 }

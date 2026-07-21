@@ -4,6 +4,7 @@ import { auth } from "@/lib/auth";
 import { db } from "@/lib/db";
 import { property } from "@/lib/db-schema";
 import { eq } from "drizzle-orm";
+import { sendPushNotifications } from "@/lib/notifications";
 
 export async function GET() {
   const session = await auth.api.getSession({ headers: await headers() });
@@ -62,5 +63,19 @@ export async function POST(request: Request) {
       landlordId: session.user.id,
     })
     .returning();
-  return NextResponse.json(row[0], { status: 201 });
+
+  const created = row[0];
+  const slug = created.title
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-|-$/g, "")
+    .slice(0, 40);
+
+  sendPushNotifications(
+    `New Listing: ${created.title}`,
+    `${created.type} — UGX ${created.price.toLocaleString("en-UG")}`,
+    `/properties/${slug}`,
+  ).catch(() => {});
+
+  return NextResponse.json(created, { status: 201 });
 }
