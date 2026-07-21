@@ -3,11 +3,16 @@ import { db } from "./db";
 import { pushSubscription, notification } from "./db-schema";
 import webpush from "web-push";
 
-webpush.setVapidDetails(
-  process.env.VAPID_SUBJECT!,
-  process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY!,
-  process.env.VAPID_PRIVATE_KEY!,
-);
+let vapidInitialized = false;
+function ensureVapid() {
+  if (vapidInitialized) return;
+  vapidInitialized = true;
+  webpush.setVapidDetails(
+    process.env.VAPID_SUBJECT!,
+    process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY!,
+    process.env.VAPID_PRIVATE_KEY!,
+  );
+}
 
 export async function createInAppNotification(
   title: string,
@@ -32,6 +37,7 @@ export async function sendPushNotifications(
   body: string,
   link: string,
 ) {
+  ensureVapid();
   const subs = await db().select().from(pushSubscription);
   const payload = JSON.stringify({ title, body, link });
 
