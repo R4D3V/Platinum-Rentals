@@ -1,6 +1,7 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState, useMemo } from "react";
+import useSWR from "swr";
 import Link from "next/link";
 import {
   Plus,
@@ -12,44 +13,43 @@ import {
 } from "lucide-react";
 import type { Property } from "@/lib/data";
 import FilterTabs from "@/components/FilterTabs";
+import { fetcher } from "@/lib/fetcher";
 
 export default function MyListingsPage() {
-  const [properties, setProperties] = useState<Property[]>([]);
-  const [loading, setLoading] = useState(true);
+  const { data: properties = [], isLoading, mutate } = useSWR<Property[]>("/api/user/properties", fetcher);
   const [activeType, setActiveType] = useState<string | null>(null);
   const [activeArea, setActiveArea] = useState<string | null>(null);
   const [activeStatus, setActiveStatus] = useState<string | null>(null);
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
   const [deleting, setDeleting] = useState(false);
 
-  const types = [...new Set(properties.map((p) => p.type))];
-  const areas = [...new Set(properties.map((p) => p.area))];
-  const statuses = [...new Set(properties.map((p) => p.status))];
+  const types = useMemo(
+    () => [...new Set(properties.map((p) => p.type))],
+    [properties],
+  );
+  const areas = useMemo(
+    () => [...new Set(properties.map((p) => p.area))],
+    [properties],
+  );
+  const statuses = useMemo(
+    () => [...new Set(properties.map((p) => p.status))],
+    [properties],
+  );
 
-  const filtered = properties.filter((p) => {
-    if (activeType && p.type !== activeType) return false;
-    if (activeArea && p.area !== activeArea) return false;
-    if (activeStatus && p.status !== activeStatus) return false;
-    return true;
-  });
+  const filtered = useMemo(
+    () => properties.filter((p) => {
+      if (activeType && p.type !== activeType) return false;
+      if (activeArea && p.area !== activeArea) return false;
+      if (activeStatus && p.status !== activeStatus) return false;
+      return true;
+    }),
+    [properties, activeType, activeArea, activeStatus],
+  );
 
-  const allFilteredSelected =
-    filtered.length > 0 && filtered.every((p) => selectedIds.has(p.id));
-
-  async function fetchProperties() {
-    setLoading(true);
-    try {
-      const res = await fetch("/api/user/properties");
-      const data = await res.json();
-      setProperties(data);
-    } finally {
-      setLoading(false);
-    }
-  }
-
-  useEffect(() => {
-    fetchProperties();
-  }, []);
+  const allFilteredSelected = useMemo(
+    () => filtered.length > 0 && filtered.every((p) => selectedIds.has(p.id)),
+    [filtered, selectedIds],
+  );
 
   function toggleSelect(id: string) {
     setSelectedIds((prev) => {
@@ -72,7 +72,7 @@ export default function MyListingsPage() {
     if (!confirm("Delete this property?")) return;
     await fetch(`/api/user/properties/${id}`, { method: "DELETE" });
     setSelectedIds(new Set());
-    await fetchProperties();
+    mutate();
   }
 
   async function handleBulkDelete() {
@@ -86,7 +86,7 @@ export default function MyListingsPage() {
         body: JSON.stringify({ ids: [...selectedIds] }),
       });
       setSelectedIds(new Set());
-      await fetchProperties();
+      mutate();
     } finally {
       setDeleting(false);
     }
@@ -136,7 +136,7 @@ export default function MyListingsPage() {
         </div>
       )}
 
-      {loading ? (
+      {isLoading ? (
         <div className="mt-12 flex justify-center">
           <Loader2 size={24} className="animate-spin" style={{ color: "var(--color-ink-faint)" }} />
         </div>

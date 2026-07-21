@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Image from "next/image";
 import { ChevronLeft, ChevronRight, ImageIcon } from "lucide-react";
 
 interface PropertyGalleryProps {
@@ -42,9 +43,11 @@ export default function PropertyGallery({
       {/* Main image */}
       <div className="relative min-w-0 overflow-hidden rounded-3xl sm:rounded-3xl px-4 sm:px-0">
         {images[active] ? (
-          <img
+          <Image
             src={images[active]}
             alt={`${type} - Image ${active + 1}`}
+            fill
+            sizes="(max-width: 640px) 100vw, 75vw"
             className="aspect-[4/3] w-full object-cover sm:aspect-auto sm:h-[28rem] sm:rounded-3xl"
           />
         ) : (
@@ -98,10 +101,12 @@ export default function PropertyGallery({
             aria-label={`View image ${i + 1}`}
           >
             {images[i] ? (
-              <img
+              <Image
                 src={images[i]}
                 alt={`${type} thumbnail ${i + 1}`}
-                className="h-full w-full object-cover"
+                fill
+                sizes="96px"
+                className="object-cover"
                 style={{ opacity: active === i ? 1 : 0.5 }}
               />
             ) : (

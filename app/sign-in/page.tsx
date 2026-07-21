@@ -75,7 +75,7 @@ export default function SignInPage() {
 
                   <div className="mt-12 hidden lg:block">
                     <Image
-                      src="/logo.png"
+                      src="/logo/platinum-rentals-logo-full.svg"
                       alt="Platinum Rentals"
                       width={168}
                       height={76}

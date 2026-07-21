@@ -1,6 +1,7 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState, useMemo } from "react";
+import useSWR from "swr";
 import Link from "next/link";
 import {
   Plus,
@@ -14,6 +15,7 @@ import {
 } from "lucide-react";
 import type { Property } from "@/lib/data";
 import FilterTabs from "@/components/FilterTabs";
+import { fetcher } from "@/lib/fetcher";
 
 interface UserInfo {
   id: string;
@@ -22,9 +24,8 @@ interface UserInfo {
 }
 
 export default function AdminPropertiesPage() {
-  const [properties, setProperties] = useState<Property[]>([]);
-  const [users, setUsers] = useState<UserInfo[]>([]);
-  const [loading, setLoading] = useState(true);
+  const { data: properties = [], isLoading: propsLoading, mutate } = useSWR<Property[]>("/api/admin/properties", fetcher);
+  const { data: users = [] } = useSWR<UserInfo[]>("/api/admin/users", fetcher);
   const [activeType, setActiveType] = useState<string | null>(null);
   const [activeArea, setActiveArea] = useState<string | null>(null);
   const [activeStatus, setActiveStatus] = useState<string | null>(null);
@@ -32,41 +33,45 @@ export default function AdminPropertiesPage() {
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
   const [deleting, setDeleting] = useState(false);
 
-  const userMap = new Map(users.map((u) => [u.id, u.name || u.email]));
-  const userOptions = [...new Set(properties.map((p) => p.landlordId).filter(Boolean))] as string[];
+  const userMap = useMemo(
+    () => new Map(users.map((u) => [u.id, u.name || u.email])),
+    [users],
+  );
+  const userOptions = useMemo(
+    () => [...new Set(properties.map((p) => p.landlordId).filter(Boolean))] as string[],
+    [properties],
+  );
 
-  const types = [...new Set(properties.map((p) => p.type))];
-  const areas = [...new Set(properties.map((p) => p.area))];
-  const statuses = [...new Set(properties.map((p) => p.status))];
+  const types = useMemo(
+    () => [...new Set(properties.map((p) => p.type))],
+    [properties],
+  );
+  const areas = useMemo(
+    () => [...new Set(properties.map((p) => p.area))],
+    [properties],
+  );
+  const statuses = useMemo(
+    () => [...new Set(properties.map((p) => p.status))],
+    [properties],
+  );
 
-  const filtered = properties.filter((p) => {
-    if (activeType && p.type !== activeType) return false;
-    if (activeArea && p.area !== activeArea) return false;
-    if (activeStatus && p.status !== activeStatus) return false;
-    if (activeUser && p.landlordId !== activeUser) return false;
-    return true;
-  });
+  const filtered = useMemo(
+    () => properties.filter((p) => {
+      if (activeType && p.type !== activeType) return false;
+      if (activeArea && p.area !== activeArea) return false;
+      if (activeStatus && p.status !== activeStatus) return false;
+      if (activeUser && p.landlordId !== activeUser) return false;
+      return true;
+    }),
+    [properties, activeType, activeArea, activeStatus, activeUser],
+  );
 
-  const allFilteredSelected =
-    filtered.length > 0 && filtered.every((p) => selectedIds.has(p.id));
+  const allFilteredSelected = useMemo(
+    () => filtered.length > 0 && filtered.every((p) => selectedIds.has(p.id)),
+    [filtered, selectedIds],
+  );
 
-  async function fetchData() {
-    setLoading(true);
-    try {
-      const [propsRes, usersRes] = await Promise.all([
-        fetch("/api/admin/properties"),
-        fetch("/api/admin/users"),
-      ]);
-      setProperties(await propsRes.json());
-      setUsers(await usersRes.json());
-    } finally {
-      setLoading(false);
-    }
-  }
-
-  useEffect(() => {
-    fetchData();
-  }, []);
+  const loading = propsLoading;
 
   function toggleSelect(id: string) {
     setSelectedIds((prev) => {
@@ -89,7 +94,7 @@ export default function AdminPropertiesPage() {
     if (!confirm("Delete this property?")) return;
     await fetch(`/api/admin/properties/${id}`, { method: "DELETE" });
     setSelectedIds(new Set());
-    await fetchData();
+    mutate();
   }
 
   async function handleBulkDelete() {
@@ -103,7 +108,7 @@ export default function AdminPropertiesPage() {
         body: JSON.stringify({ ids: [...selectedIds] }),
       });
       setSelectedIds(new Set());
-      await fetchData();
+      mutate();
     } finally {
       setDeleting(false);
     }
@@ -125,7 +130,7 @@ export default function AdminPropertiesPage() {
         title: `${p.title} (Copy)`,
       }),
     });
-    await fetchData();
+    mutate();
   }
 
   return (

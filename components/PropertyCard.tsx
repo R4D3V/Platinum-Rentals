@@ -1,21 +1,22 @@
-"use client";
-
 import Link from "next/link";
+import Image from "next/image";
+import { memo } from "react";
 import { BedDouble, Bath, MapPin, ImageIcon } from "lucide-react";
 import type { Property } from "@/lib/data";
 import { formatPrice } from "@/lib/data";
 
-export default function PropertyCard({ property }: { property: Property }) {
+function PropertyCard({ property }: { property: Property }) {
   return (
     <Link href={`/properties/${property.id}`}>
       <div className="group surface-raised flex flex-col overflow-hidden rounded-3xl transition-transform duration-200 hover:scale-[1.02]">
-        {/* Image */}
         <div className="relative flex h-56 items-center justify-center overflow-hidden">
           {property.images[0] ? (
-            <img
+            <Image
               src={property.images[0]}
               alt={property.title}
-              className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
+              fill
+              sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+              className="object-cover transition-transform duration-300 group-hover:scale-105"
             />
           ) : (
             <div className="flex h-full w-full items-center justify-center bg-slate-200">
@@ -108,3 +109,5 @@ export default function PropertyCard({ property }: { property: Property }) {
     </Link>
   );
 }
+
+export default memo(PropertyCard);

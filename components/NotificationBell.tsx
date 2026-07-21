@@ -1,8 +1,10 @@
 "use client";
 
-import { useState, useEffect, useRef, useCallback } from "react";
+import { useState, useEffect, useRef } from "react";
+import useSWR from "swr";
 import { Bell } from "lucide-react";
 import Link from "next/link";
+import { fetcher } from "@/lib/fetcher";
 
 interface NotificationItem {
   id: string;
@@ -15,27 +17,12 @@ interface NotificationItem {
 
 export default function NotificationBell() {
   const [open, setOpen] = useState(false);
-  const [notifications, setNotifications] = useState<NotificationItem[]>([]);
   const panelRef = useRef<HTMLDivElement>(null);
-
-  const fetchNotifications = useCallback(async () => {
-    try {
-      const res = await fetch("/api/notifications");
-      if (res.ok) {
-        const data = await res.json();
-        setNotifications(data);
-      }
-    } catch {
-      // silently fail
-    }
-  }, []);
-
-  useEffect(() => {
-    if (!open) return;
-    fetchNotifications();
-    const interval = setInterval(fetchNotifications, 30000);
-    return () => clearInterval(interval);
-  }, [open, fetchNotifications]);
+  const { data: notifications = [], mutate } = useSWR<NotificationItem[]>(
+    open ? "/api/notifications" : null,
+    fetcher,
+    { refreshInterval: 30000 },
+  );
 
   useEffect(() => {
     function handleClick(e: MouseEvent) {
@@ -51,16 +38,12 @@ export default function NotificationBell() {
 
   async function markRead(id: string) {
     await fetch(`/api/notifications/${id}`, { method: "PUT" });
-    setNotifications((prev) =>
-      prev.map((n) => (n.id === id ? { ...n, read: "true" } : n)),
-    );
+    mutate((prev) => prev?.map((n) => (n.id === id ? { ...n, read: "true" } : n)), false);
   }
 
   async function markAllRead() {
     await fetch("/api/notifications/read-all", { method: "POST" });
-    setNotifications((prev) =>
-      prev.map((n) => ({ ...n, read: "true" })),
-    );
+    mutate((prev) => prev?.map((n) => ({ ...n, read: "true" })), false);
   }
 
   return (

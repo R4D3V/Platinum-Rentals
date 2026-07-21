@@ -20,7 +20,7 @@ export default function Footer() {
           <div className="grid gap-10 sm:grid-cols-3">
             <div>
               <Image
-                src="/logo.png"
+                src="/logo/platinum-rentals-logo-full.svg"
                 alt="Platinum Rentals"
                 width={168}
                 height={76}

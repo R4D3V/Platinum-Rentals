@@ -9,5 +9,7 @@ export async function GET() {
     .from(notification)
     .orderBy(desc(notification.createdAt))
     .limit(50);
-  return NextResponse.json(rows);
+  return NextResponse.json(rows, {
+    headers: { "Cache-Control": "private, s-maxage=30, stale-while-revalidate=60" },
+  });
 }

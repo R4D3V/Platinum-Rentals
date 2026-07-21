@@ -1,8 +1,10 @@
 "use client";
 
-import { useEffect, useState, use, useMemo } from "react";
+import { useState, use, useMemo } from "react";
+import useSWR from "swr";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import Image from "next/image";
 import {
   Loader2,
   ArrowLeft,
@@ -14,6 +16,7 @@ import {
 } from "lucide-react";
 import { CldUploadWidget } from "next-cloudinary";
 import type { Property } from "@/lib/data";
+import { fetcher } from "@/lib/fetcher";
 
 const TYPES = ["Apartment", "Villa", "Townhouse", "Studio", "Commercial"] as const;
 const STATUSES = ["Available", "Let", "Under Offer"] as const;
@@ -26,41 +29,37 @@ export default function EditListingPage({
   const { id } = use(params);
   const router = useRouter();
   const [form, setForm] = useState<Property | null>(null);
-  const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [featureInput, setFeatureInput] = useState("");
-  const [allProperties, setAllProperties] = useState<{ area: string; location: string }[]>([]);
 
-  useEffect(() => {
-    fetch(`/api/user/properties/${id}`)
-      .then((r) => r.json())
-      .then((data) => {
-        setForm({
-          id: data.id,
-          propertyId: data.propertyId,
-          title: data.title,
-          type: data.type,
-          price: data.price,
-          bedrooms: data.bedrooms,
-          bathrooms: data.bathrooms,
-          parking: data.parking,
-          size: data.size,
-          location: data.location,
-          area: data.area,
-          description: data.description,
-          features: data.features ?? [],
-          status: data.status,
-          availableFrom: data.availableFrom ?? undefined,
-          gradient: data.gradient,
-          images: data.images ?? [],
-        });
-      })
-      .catch(() => router.push("/dashboard/properties"))
-      .finally(() => setLoading(false));
-    fetch("/api/properties")
-      .then((r) => r.json())
-      .then((data: { area: string; location: string }[]) => setAllProperties(data));
-  }, [id, router]);
+  const { data: propertyData, isLoading: loading } = useSWR(`/api/user/properties/${id}`, fetcher);
+  const { data: allProperties = [] } = useSWR<{ area: string; location: string }[]>("/api/properties", fetcher);
+
+  if (propertyData && !form) {
+    setForm({
+      id: propertyData.id,
+      propertyId: propertyData.propertyId,
+      title: propertyData.title,
+      type: propertyData.type,
+      price: propertyData.price,
+      bedrooms: propertyData.bedrooms,
+      bathrooms: propertyData.bathrooms,
+      parking: propertyData.parking,
+      size: propertyData.size,
+      location: propertyData.location,
+      area: propertyData.area,
+      description: propertyData.description,
+      features: propertyData.features ?? [],
+      status: propertyData.status,
+      availableFrom: propertyData.availableFrom ?? undefined,
+      gradient: propertyData.gradient,
+      images: propertyData.images ?? [],
+    });
+  }
+
+  if (!loading && !propertyData && !form) {
+    router.push("/dashboard/properties");
+  }
 
   const areas = useMemo(
     () => {
@@ -186,11 +185,13 @@ export default function EditListingPage({
           {form.images.length > 0 && (
             <div className="mb-3 grid grid-cols-3 gap-2">
               {form.images.map((url, i) => (
-                <div key={i} className="group relative overflow-hidden rounded-lg">
-                  <img
+                <div key={url} className="group relative h-20 overflow-hidden rounded-lg">
+                  <Image
                     src={url}
                     alt={`Upload ${i + 1}`}
-                    className="h-20 w-full object-cover"
+                    fill
+                    sizes="(max-width: 640px) 33vw, 150px"
+                    className="object-cover"
                   />
                   <button
                     type="button"
@@ -364,7 +365,7 @@ export default function EditListingPage({
           <div className="flex flex-wrap gap-2">
             {form.features.map((f, i) => (
               <span
-                key={i}
+                key={`f-${i}`}
                 className="surface-raised inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-medium"
               >
                 {f}

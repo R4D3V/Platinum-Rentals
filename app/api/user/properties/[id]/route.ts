@@ -24,7 +24,9 @@ export async function GET(
   if (!row || row.landlordId !== session.user.id) {
     return NextResponse.json({ error: "Not found" }, { status: 404 });
   }
-  return NextResponse.json(row);
+  return NextResponse.json(row, {
+    headers: { "Cache-Control": "private, s-maxage=30, stale-while-revalidate=60" },
+  });
 }
 
 export async function PUT(

@@ -1,6 +1,7 @@
 "use client";
 
-import { useEffect, useState, use } from "react";
+import { useState, use } from "react";
+import useSWR from "swr";
 import Link from "next/link";
 import {
   Loader2,
@@ -12,6 +13,7 @@ import {
   Trash2,
 } from "lucide-react";
 import type { Property } from "@/lib/data";
+import { fetcher } from "@/lib/fetcher";
 
 interface UserInfo {
   id: string;
@@ -28,29 +30,18 @@ export default function UserDetailPage({
   params: Promise<{ id: string }>;
 }) {
   const { id } = use(params);
-  const [user, setUser] = useState<UserInfo | null>(null);
-  const [properties, setProperties] = useState<Property[]>([]);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    async function load() {
-      const [usersRes, propsRes] = await Promise.all([
-        fetch("/api/admin/users"),
-        fetch(`/api/admin/users/${id}/properties`),
-      ]);
-      const users: UserInfo[] = await usersRes.json();
-      const props: Property[] = await propsRes.json();
-      setUser(users.find((u) => u.id === id) ?? null);
-      setProperties(props);
-      setLoading(false);
-    }
-    load();
-  }, [id]);
+  const { data: users = [] } = useSWR<UserInfo[]>("/api/admin/users", fetcher);
+  const { data: properties = [], isLoading, mutate } = useSWR<Property[]>(
+    `/api/admin/users/${id}/properties`,
+    fetcher,
+  );
+  const user = users.find((u) => u.id === id) ?? null;
+  const loading = isLoading;
 
   async function handleDelete(propertyId: string, title: string) {
     if (!confirm(`Delete "${title}"? This cannot be undone.`)) return;
     await fetch(`/api/admin/properties/${propertyId}`, { method: "DELETE" });
-    setProperties((prev) => prev.filter((p) => p.id !== propertyId));
+    mutate();
   }
 
   if (loading) {

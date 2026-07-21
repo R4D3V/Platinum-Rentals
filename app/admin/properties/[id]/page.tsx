@@ -1,8 +1,10 @@
 "use client";
 
-import { useEffect, useState, use } from "react";
+import { useState, use } from "react";
+import useSWR from "swr";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import Image from "next/image";
 import {
   Loader2,
   ArrowLeft,
@@ -14,6 +16,7 @@ import {
 } from "lucide-react";
 import { CldUploadWidget } from "next-cloudinary";
 import type { Property } from "@/lib/data";
+import { fetcher } from "@/lib/fetcher";
 
 const TYPES = ["Apartment", "Villa", "Townhouse", "Studio", "Commercial"] as const;
 const STATUSES = ["Available", "Let", "Under Offer"] as const;
@@ -26,36 +29,32 @@ export default function EditPropertyPage({
   const { id } = use(params);
   const router = useRouter();
   const [form, setForm] = useState<Property | null>(null);
-  const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [featureInput, setFeatureInput] = useState("");
 
-  useEffect(() => {
-    fetch(`/api/admin/properties/${id}`)
-      .then((r) => r.json())
-      .then((data) => {
-        setForm({
-          id: data.id,
-          propertyId: data.propertyId,
-          title: data.title,
-          type: data.type,
-          price: data.price,
-          bedrooms: data.bedrooms,
-          bathrooms: data.bathrooms,
-          parking: data.parking,
-          size: data.size,
-          location: data.location,
-          area: data.area,
-          description: data.description,
-          features: data.features ?? [],
-          status: data.status,
-          availableFrom: data.availableFrom ?? undefined,
-          gradient: data.gradient,
-          images: data.images ?? [],
-        });
-      })
-      .finally(() => setLoading(false));
-  }, [id]);
+  const { data: propertyData, isLoading: loading } = useSWR(`/api/admin/properties/${id}`, fetcher);
+
+  if (propertyData && !form) {
+    setForm({
+      id: propertyData.id,
+      propertyId: propertyData.propertyId,
+      title: propertyData.title,
+      type: propertyData.type,
+      price: propertyData.price,
+      bedrooms: propertyData.bedrooms,
+      bathrooms: propertyData.bathrooms,
+      parking: propertyData.parking,
+      size: propertyData.size,
+      location: propertyData.location,
+      area: propertyData.area,
+      description: propertyData.description,
+      features: propertyData.features ?? [],
+      status: propertyData.status,
+      availableFrom: propertyData.availableFrom ?? undefined,
+      gradient: propertyData.gradient,
+      images: propertyData.images ?? [],
+    });
+  }
 
   async function handleSave() {
     setSaving(true);
@@ -173,11 +172,13 @@ export default function EditPropertyPage({
           {form.images.length > 0 && (
             <div className="mb-3 grid grid-cols-3 gap-2">
               {form.images.map((url, i) => (
-                <div key={i} className="group relative overflow-hidden rounded-lg">
-                  <img
+                <div key={url} className="group relative h-20 overflow-hidden rounded-lg">
+                  <Image
                     src={url}
                     alt={`Upload ${i + 1}`}
-                    className="h-20 w-full object-cover"
+                    fill
+                    sizes="(max-width: 640px) 33vw, 150px"
+                    className="object-cover"
                   />
                   <button
                     type="button"
@@ -358,7 +359,7 @@ export default function EditPropertyPage({
           <div className="flex flex-wrap gap-2">
             {form.features.map((f, i) => (
               <span
-                key={i}
+                key={`f-${i}`}
                 className="surface-raised inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-medium"
               >
                 {f}

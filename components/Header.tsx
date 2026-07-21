@@ -41,11 +41,11 @@ export default function Header() {
       <div className="mx-auto flex max-w-6xl items-center justify-between rounded-2xl surface-raised px-4 py-3 sm:px-6">
         <Link href="/" className="flex items-center gap-2">
           <Image
-            src="/logo.png"
+            src="/logo/platinum-rentals-logo-full.svg"
             alt="Platinum Rentals"
             width={168}
             height={76}
-            className={`h-10 w-auto sm:h-12 rounded-lg${dark ? " bg-white p-1" : ""}`}
+            className={`h-10 w-auto sm:h-12 ${dark ? " brightness-0 invert" : ""}`}
             priority
           />
         </Link>

@@ -1,8 +1,10 @@
 "use client";
 
-import { useState, useEffect, useMemo } from "react";
+import { useState, useMemo } from "react";
+import useSWR from "swr";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import Image from "next/image";
 import {
   Loader2,
   ArrowLeft,
@@ -13,6 +15,7 @@ import {
   Upload,
 } from "lucide-react";
 import { CldUploadWidget } from "next-cloudinary";
+import { fetcher } from "@/lib/fetcher";
 
 const TYPES = ["Apartment", "Villa", "Townhouse", "Studio", "Commercial"] as const;
 const STATUSES = ["Available", "Let", "Under Offer"] as const;
@@ -43,22 +46,17 @@ export default function NewListingPage() {
   const [saving, setSaving] = useState(false);
   const [featureInput, setFeatureInput] = useState("");
 
-  const [allProperties, setAllProperties] = useState<{ area: string; location: string }[]>([]);
+  const { data: allProperties = [] } = useSWR<{ area: string; location: string }[]>("/api/properties", fetcher);
 
-  useEffect(() => {
-    fetch("/api/admin/properties")
-      .then((r) => r.json())
-      .then((data: { propertyId: string }[]) => {
-        const max = data.reduce((m, p) => {
-          const n = parseInt(p.propertyId.replace("PR-", ""), 10);
-          return isNaN(n) ? m : Math.max(m, n);
-        }, 999);
-        setForm((f) => ({ ...f, propertyId: `PR-${max + 1}` }));
-      });
-    fetch("/api/properties")
-      .then((r) => r.json())
-      .then((data: { area: string; location: string }[]) => setAllProperties(data));
-  }, []);
+  useSWR<{ propertyId: string }[]>("/api/admin/properties", fetcher, {
+    onSuccess(data) {
+      const max = data.reduce((m, p) => {
+        const n = parseInt(p.propertyId.replace("PR-", ""), 10);
+        return isNaN(n) ? m : Math.max(m, n);
+      }, 999);
+      setForm((f) => ({ ...f, propertyId: `PR-${max + 1}` }));
+    },
+  });
 
   const areas = useMemo(
     () => [...new Set(allProperties.map((p) => p.area))].sort(),
@@ -173,11 +171,13 @@ export default function NewListingPage() {
           {form.images.length > 0 && (
             <div className="mb-3 grid grid-cols-3 gap-2">
               {form.images.map((url, i) => (
-                <div key={i} className="group relative overflow-hidden rounded-lg">
-                  <img
+                <div key={url} className="group relative h-20 overflow-hidden rounded-lg">
+                  <Image
                     src={url}
                     alt={`Upload ${i + 1}`}
-                    className="h-20 w-full object-cover"
+                    fill
+                    sizes="(max-width: 640px) 33vw, 150px"
+                    className="object-cover"
                   />
                   <button
                     type="button"
@@ -352,7 +352,7 @@ export default function NewListingPage() {
           <div className="flex flex-wrap gap-2">
             {form.features.map((f, i) => (
               <span
-                key={i}
+                key={`f-${i}`}
                 className="surface-raised inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-medium"
               >
                 {f}

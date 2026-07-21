@@ -20,5 +20,7 @@ export async function GET(
     .from(property)
     .where(eq(property.landlordId, id));
 
-  return NextResponse.json(rows);
+  return NextResponse.json(rows, {
+    headers: { "Cache-Control": "private, s-maxage=30, stale-while-revalidate=60" },
+  });
 }

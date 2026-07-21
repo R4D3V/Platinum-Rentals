@@ -3,9 +3,13 @@ import { db } from "@/lib/db";
 import { property } from "@/lib/db-schema";
 import { sendPushNotifications } from "@/lib/notifications";
 
+export const revalidate = 30;
+
 export async function GET() {
   const rows = await db().select().from(property);
-  return NextResponse.json(rows);
+  return NextResponse.json(rows, {
+    headers: { "Cache-Control": "public, s-maxage=30, stale-while-revalidate=60" },
+  });
 }
 
 export async function POST(request: Request) {
@@ -48,16 +52,11 @@ export async function POST(request: Request) {
     .returning();
 
   const created = row[0];
-  const slug = created.title
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, "-")
-    .replace(/^-|-$/g, "")
-    .slice(0, 40);
 
   sendPushNotifications(
     `New Listing: ${created.title}`,
     `${created.type} — UGX ${created.price.toLocaleString("en-UG")}`,
-    `/properties/${slug}`,
+    `/properties/${created.id}`,
   ).catch(() => {});
 
   return NextResponse.json(created, { status: 201 });

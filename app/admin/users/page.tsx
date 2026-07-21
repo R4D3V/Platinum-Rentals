@@ -1,6 +1,7 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
+import useSWR from "swr";
 import Link from "next/link";
 import {
   Plus,
@@ -12,6 +13,7 @@ import {
   ShieldCheck,
   Building2,
 } from "lucide-react";
+import { fetcher } from "@/lib/fetcher";
 
 interface UserRow {
   id: string;
@@ -40,37 +42,20 @@ const EMPTY_FORM: UserForm = {
 };
 
 export default function AdminUsersPage() {
-  const [users, setUsers] = useState<UserRow[]>([]);
-  const [loading, setLoading] = useState(true);
+  const { data: usersRaw = [], isLoading, mutate } = useSWR<UserRow[]>("/api/admin/users", fetcher);
+  const { data: allProperties = [] } = useSWR<{ landlordId: string | null }[]>("/api/admin/properties", fetcher);
   const [saving, setSaving] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [form, setForm] = useState<UserForm>(EMPTY_FORM);
   const [error, setError] = useState("");
 
-  async function fetchUsers() {
-    setLoading(true);
-    try {
-      const [usersRes, propsRes] = await Promise.all([
-        fetch("/api/admin/users"),
-        fetch("/api/admin/properties"),
-      ]);
-      if (!usersRes.ok) throw new Error("Failed to fetch");
-      const usersData: UserRow[] = await usersRes.json();
-      const propsData: { landlordId: string | null }[] = await propsRes.json();
-      const counts: Record<string, number> = {};
-      for (const p of propsData) {
-        if (p.landlordId) counts[p.landlordId] = (counts[p.landlordId] || 0) + 1;
-      }
-      setUsers(usersData.map((u) => ({ ...u, listingsCount: counts[u.id] || 0 })));
-    } finally {
-      setLoading(false);
-    }
+  const counts: Record<string, number> = {};
+  for (const p of allProperties) {
+    if (p.landlordId) counts[p.landlordId] = (counts[p.landlordId] || 0) + 1;
   }
-
-  useEffect(() => {
-    fetchUsers();
-  }, []);
+  const users = usersRaw.map((u) => ({ ...u, listingsCount: counts[u.id] || 0 }));
+  const loading = isLoading;
 
   function openAdd() {
     setEditingId(null);
@@ -121,7 +106,7 @@ export default function AdminUsersPage() {
         }
       }
       setShowModal(false);
-      await fetchUsers();
+      mutate();
     } catch (e: unknown) {
       setError(e instanceof Error ? e.message : "An error occurred");
     } finally {
@@ -137,7 +122,7 @@ export default function AdminUsersPage() {
       alert(err.error || err.message || "Failed to delete");
       return;
     }
-    await fetchUsers();
+    mutate();
   }
 
   return (

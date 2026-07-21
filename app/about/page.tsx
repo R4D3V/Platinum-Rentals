@@ -1,11 +1,10 @@
-"use client";
-
-import { useState } from "react";
 import Image from "next/image";
-import { Eye, Target, ShieldCheck, Clock, Users, Scale, X } from "lucide-react";
+import Link from "next/link";
+import { Eye, Target, ShieldCheck, Clock, Users, Scale, ArrowUpRight } from "lucide-react";
 import PageHero from "@/components/PageHero";
 import LandlordCta from "@/components/LandlordCta";
 import FadeIn from "@/components/FadeIn";
+import { FOUNDERS } from "@/lib/founders";
 
 const STATS = [
   { label: "Founded", value: "2026" },
@@ -37,16 +36,9 @@ const VALUES = [
   },
 ];
 
-const FOUNDERS = [
-  { id: 1, name: "Founder 1" },
-  { id: 2, name: "Founder 2" },
-  { id: 3, name: "Founder 3" },
-  { id: 4, name: "Founder 4" },
-];
+
 
 export default function AboutPage() {
-  const [preview, setPreview] = useState<string | null>(null);
-
   return (
     <main>
       <PageHero
@@ -173,54 +165,31 @@ export default function AboutPage() {
 
           <FadeIn delay={100}>
             <div className="flex flex-wrap items-center justify-center gap-8 sm:gap-10">
-              {FOUNDERS.map(({ id, name }) => (
-                <button
+              {FOUNDERS.map(({ id, name, role, image }) => (
+                <Link
                   key={id}
-                  onClick={() => setPreview(`/founders/founder-${id}.png`)}
+                  href={`/about/founders/${id}`}
                   className="group surface-raised flex flex-col items-center rounded-2xl p-5 transition-transform hover:scale-105"
                 >
                   <div className="relative h-40 w-40 overflow-hidden rounded-full sm:h-48 sm:w-48">
                     <Image
-                      src={`/founders/founder-${id}.png`}
+                      src={image}
                       alt={name}
                       fill
                       className="object-cover"
                     />
                   </div>
-                </button>
+                  <p className="mt-3 text-sm font-bold">{name}</p>
+                  <p className="text-xs" style={{ color: "var(--color-ink-faint)" }}>{role}</p>
+                  <span className="mt-2 inline-flex items-center gap-1 text-xs font-semibold" style={{ color: "var(--color-accent)" }}>
+                    View profile <ArrowUpRight size={12} />
+                  </span>
+                </Link>
               ))}
             </div>
           </FadeIn>
         </div>
       </section>
-
-      {/* Image Preview Modal */}
-      {preview && (
-        <div
-          className="glass-modal-backdrop fixed inset-0 z-[100] flex items-center justify-center p-4"
-          onClick={() => setPreview(null)}
-        >
-          <button
-            onClick={() => setPreview(null)}
-            className="glass-modal-close absolute right-6 top-6 flex h-10 w-10 items-center justify-center rounded-full transition"
-            aria-label="Close preview"
-          >
-            <X size={20} />
-          </button>
-          <div
-            className="surface-raised-lg relative max-h-[80vh] max-w-[90vw] overflow-hidden rounded-2xl p-2"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <Image
-              src={preview}
-              alt="Founder preview"
-              width={800}
-              height={800}
-              className="rounded-xl object-contain"
-            />
-          </div>
-        </div>
-      )}
 
       <LandlordCta />
     </main>

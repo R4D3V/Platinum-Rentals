@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, type ReactNode } from "react";
+import { memo, useEffect, useRef, type ReactNode } from "react";
 
 interface FadeInProps {
   children: ReactNode;
@@ -9,7 +9,7 @@ interface FadeInProps {
   className?: string;
 }
 
-export default function FadeIn({
+function FadeIn({
   children,
   delay = 0,
   direction = "up",
@@ -51,3 +51,5 @@ export default function FadeIn({
     </div>
   );
 }
+
+export default memo(FadeIn);

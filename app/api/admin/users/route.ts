@@ -12,7 +12,9 @@ export async function GET() {
     query: {},
     headers: await headers(),
   });
-  return NextResponse.json(users);
+  return NextResponse.json(users, {
+    headers: { "Cache-Control": "private, s-maxage=15, stale-while-revalidate=30" },
+  });
 }
 
 export async function POST(request: Request) {

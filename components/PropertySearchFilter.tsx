@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useMemo, useEffect } from "react";
+import useSWR from "swr";
 import {
   Search,
   SlidersHorizontal,
@@ -17,6 +18,7 @@ import {
 import FadeIn from "@/components/FadeIn";
 import PropertyCard from "@/components/PropertyCard";
 import type { Property } from "@/lib/data";
+import { fetcher } from "@/lib/fetcher";
 
 const TYPES = ["All", "Apartment", "Villa", "Townhouse", "Studio", "Commercial"] as const;
 const STATUSES = ["All", "Available", "Let", "Under Offer"] as const;
@@ -59,8 +61,7 @@ function hasActiveFilters(f: Filters) {
 }
 
 export default function PropertySearchFilter() {
-  const [properties, setProperties] = useState<Property[]>([]);
-  const [loading, setLoading] = useState(true);
+  const { data: properties = [], isLoading } = useSWR<Property[]>("/api/properties", fetcher);
   const [draft, setDraft] = useState<Filters>(ALL_FILTERS);
   const [applied, setApplied] = useState<Filters>(ALL_FILTERS);
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -76,13 +77,6 @@ export default function PropertySearchFilter() {
   }, []);
 
   useEffect(() => {
-    fetch("/api/properties")
-      .then((r) => r.json())
-      .then((data: Property[]) => {
-        setProperties(data);
-        setLoading(false);
-      });
-
     const params = new URLSearchParams(window.location.search);
     const initial: Partial<Filters> = {};
     const bedrooms = params.get("bedrooms");
@@ -339,7 +333,7 @@ export default function PropertySearchFilter() {
       <FadeIn delay={50}>
         <div className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
           <p className="text-sm font-medium" style={{ color: "var(--color-ink-faint)" }}>
-            {loading
+            {isLoading
               ? "Loading..."
               : `${filtered.length} propert${filtered.length === 1 ? "y" : "ies"} found` +
                 (totalPages > 1 ? ` — Page ${page} of ${totalPages}` : "")}
@@ -383,7 +377,7 @@ export default function PropertySearchFilter() {
       </FadeIn>
 
       {/* Property grid or loading / empty state */}
-      {loading ? (
+      {isLoading ? (
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {Array.from({ length: 6 }).map((_, i) => (
             <div key={i} className="surface-raised flex flex-col overflow-hidden rounded-3xl">
