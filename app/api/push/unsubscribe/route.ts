@@ -9,7 +9,7 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "Missing endpoint" }, { status: 400 });
   }
 
-  await db
+  await db()
     .delete(pushSubscription)
     .where(eq(pushSubscription.endpoint, endpoint));
 

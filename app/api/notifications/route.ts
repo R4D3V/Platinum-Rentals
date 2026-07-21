@@ -4,7 +4,7 @@ import { notification } from "@/lib/db-schema";
 import { desc } from "drizzle-orm";
 
 export async function GET() {
-  const rows = await db
+  const rows = await db()
     .select()
     .from(notification)
     .orderBy(desc(notification.createdAt))

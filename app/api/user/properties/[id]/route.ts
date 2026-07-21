@@ -15,7 +15,7 @@ export async function GET(
   }
 
   const { id } = await params;
-  const row = await db
+  const row = await db()
     .select()
     .from(property)
     .where(eq(property.id, id))
@@ -37,7 +37,7 @@ export async function PUT(
   }
 
   const { id } = await params;
-  const existing = await db
+  const existing = await db()
     .select()
     .from(property)
     .where(eq(property.id, id))
@@ -48,7 +48,7 @@ export async function PUT(
   }
 
   const body = await request.json();
-  const row = await db
+  const row = await db()
     .update(property)
     .set({
       title: body.title,
@@ -83,7 +83,7 @@ export async function DELETE(
   }
 
   const { id } = await params;
-  const existing = await db
+  const existing = await db()
     .select()
     .from(property)
     .where(eq(property.id, id))
@@ -93,6 +93,6 @@ export async function DELETE(
     return NextResponse.json({ error: "Not found" }, { status: 404 });
   }
 
-  await db.delete(property).where(eq(property.id, id));
+  await db().delete(property).where(eq(property.id, id));
   return NextResponse.json({ deleted: true });
 }

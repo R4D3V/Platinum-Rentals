@@ -4,7 +4,7 @@ import { property } from "@/lib/db-schema";
 import { sendPushNotifications } from "@/lib/notifications";
 
 export async function GET() {
-  const rows = await db.select().from(property);
+  const rows = await db().select().from(property);
   return NextResponse.json(rows);
 }
 
@@ -13,7 +13,7 @@ export async function POST(request: Request) {
 
   let propertyId = body.propertyId;
   if (!propertyId) {
-    const rows = await db
+    const rows = await db()
       .select({ propertyId: property.propertyId })
       .from(property);
     const max = rows.reduce((m, p) => {
@@ -23,7 +23,7 @@ export async function POST(request: Request) {
     propertyId = `PR-${max + 1}`;
   }
 
-  const row = await db
+  const row = await db()
     .insert(property)
     .values({
       id: body.id,

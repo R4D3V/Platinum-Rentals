@@ -11,7 +11,7 @@ export async function POST() {
     return NextResponse.json({ error: "Unauthorized" }, { status: 403 });
   }
 
-  const rows = await db
+  const rows = await db()
     .select()
     .from(property)
     .orderBy(property.propertyId);
@@ -20,7 +20,7 @@ export async function POST() {
   for (const row of rows) {
     const nextId = `PR-${num}`;
     if (row.propertyId !== nextId) {
-      await db
+      await db()
         .update(property)
         .set({ propertyId: nextId })
         .where(eq(property.id, row.id));

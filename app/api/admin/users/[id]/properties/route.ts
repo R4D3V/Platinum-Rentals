@@ -15,7 +15,7 @@ export async function GET(
   }
 
   const { id } = await params;
-  const rows = await db
+  const rows = await db()
     .select()
     .from(property)
     .where(eq(property.landlordId, id));

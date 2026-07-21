@@ -4,17 +4,17 @@ import { count, eq, sql } from "drizzle-orm";
 import { Building2, Users, Home, Tag } from "lucide-react";
 
 async function getStats() {
-  const [propertyCount] = await db
+  const [propertyCount] = await db()
     .select({ value: count() })
     .from(property);
-  const [userCount] = await db
+  const [userCount] = await db()
     .select({ value: count() })
     .from(user);
-  const [availableCount] = await db
+  const [availableCount] = await db()
     .select({ value: count() })
     .from(property)
     .where(eq(property.status, "Available"));
-  const [letCount] = await db
+  const [letCount] = await db()
     .select({ value: count() })
     .from(property)
     .where(eq(property.status, "Let"));

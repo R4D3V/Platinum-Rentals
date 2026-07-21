@@ -8,7 +8,7 @@ export async function GET(
   { params }: { params: Promise<{ id: string }> },
 ) {
   const { id } = await params;
-  const row = await db
+  const row = await db()
     .select()
     .from(property)
     .where(eq(property.id, id))
@@ -25,7 +25,7 @@ export async function PUT(
 ) {
   const { id } = await params;
   const body = await request.json();
-  const row = await db
+  const row = await db()
     .update(property)
     .set({
       title: body.title,
@@ -57,7 +57,7 @@ export async function DELETE(
   { params }: { params: Promise<{ id: string }> },
 ) {
   const { id } = await params;
-  const row = await db
+  const row = await db()
     .delete(property)
     .where(eq(property.id, id))
     .returning();

@@ -195,7 +195,7 @@ export const SAMPLE_PROPERTIES: Property[] = [
 export async function getAllProperties(): Promise<Property[]> {
   const { db } = await import("./db");
   const { property: propertyTable } = await import("./db-schema");
-  const rows = await db.select().from(propertyTable);
+  const rows = await db().select().from(propertyTable);
   return rows.map((row) => ({
     id: row.id,
     propertyId: row.propertyId,
@@ -222,7 +222,7 @@ export async function getPropertyById(id: string): Promise<Property | undefined>
   const { db } = await import("./db");
   const { property: propertyTable } = await import("./db-schema");
   const { eq } = await import("drizzle-orm");
-  const rows = await db
+  const rows = await db()
     .select()
     .from(propertyTable)
     .where(eq(propertyTable.id, id));
@@ -254,7 +254,7 @@ export async function getSimilarProperties(property: Property): Promise<Property
   const { db } = await import("./db");
   const { property: propertyTable } = await import("./db-schema");
   const { eq, ne, or, and } = await import("drizzle-orm");
-  const rows = await db
+  const rows = await db()
     .select()
     .from(propertyTable)
     .where(

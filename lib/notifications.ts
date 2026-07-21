@@ -14,7 +14,7 @@ export async function createInAppNotification(
   message: string,
   link?: string,
 ) {
-  const row = await db
+  const row = await db()
     .insert(notification)
     .values({
       id: crypto.randomUUID(),
@@ -32,7 +32,7 @@ export async function sendPushNotifications(
   body: string,
   link: string,
 ) {
-  const subs = await db.select().from(pushSubscription);
+  const subs = await db().select().from(pushSubscription);
   const payload = JSON.stringify({ title, body, link });
 
   for (const sub of subs) {
@@ -42,7 +42,7 @@ export async function sendPushNotifications(
         payload,
       );
     } catch {
-      await db.delete(pushSubscription).where(eq(pushSubscription.id, sub.id));
+      await db().delete(pushSubscription).where(eq(pushSubscription.id, sub.id));
     }
   }
 }

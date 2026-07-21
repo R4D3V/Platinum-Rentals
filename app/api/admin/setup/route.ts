@@ -28,7 +28,7 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "name, email, and password are required" }, { status: 400 });
   }
 
-  const existingAdmin = await db
+  const existingAdmin = await db()
     .select()
     .from(user)
     .where(eq(user.role, "admin"))
@@ -43,7 +43,7 @@ export async function POST(request: Request) {
   const now = new Date();
   const hashedPassword = await hashPassword(password);
 
-  await db.insert(user).values({
+  await db().insert(user).values({
     id,
     name,
     email: email.toLowerCase(),
@@ -53,7 +53,7 @@ export async function POST(request: Request) {
     updatedAt: now,
   });
 
-  await db.insert(account).values({
+  await db().insert(account).values({
     id: crypto.randomUUID(),
     accountId: id,
     providerId: "credential",

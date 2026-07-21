@@ -8,6 +8,6 @@ export async function POST(request: Request) {
   if (!Array.isArray(ids) || ids.length === 0) {
     return NextResponse.json({ error: "No IDs provided" }, { status: 400 });
   }
-  await db.delete(property).where(inArray(property.id, ids));
+  await db().delete(property).where(inArray(property.id, ids));
   return NextResponse.json({ deleted: ids.length });
 }

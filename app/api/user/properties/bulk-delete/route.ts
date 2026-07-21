@@ -16,7 +16,7 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "No IDs provided" }, { status: 400 });
   }
 
-  await db
+  await db()
     .delete(property)
     .where(
       and(inArray(property.id, ids), eq(property.landlordId, session.user.id)),

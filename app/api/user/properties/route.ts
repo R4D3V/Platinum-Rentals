@@ -12,7 +12,7 @@ export async function GET() {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  const rows = await db
+  const rows = await db()
     .select()
     .from(property)
     .where(eq(property.landlordId, session.user.id));
@@ -30,7 +30,7 @@ export async function POST(request: Request) {
 
   let propertyId = body.propertyId;
   if (!propertyId) {
-    const rows = await db
+    const rows = await db()
       .select({ propertyId: property.propertyId })
       .from(property);
     const max = rows.reduce((m, p) => {
@@ -40,7 +40,7 @@ export async function POST(request: Request) {
     propertyId = `PR-${max + 1}`;
   }
 
-  const row = await db
+  const row = await db()
     .insert(property)
     .values({
       id: body.id,

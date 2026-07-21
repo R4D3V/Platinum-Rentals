@@ -4,7 +4,7 @@ import { admin } from "better-auth/plugins/admin";
 import { db } from "./db";
 
 export const auth = betterAuth({
-  database: drizzleAdapter(db, {
+  database: drizzleAdapter(db(), {
     provider: "pg",
   }),
   plugins: [

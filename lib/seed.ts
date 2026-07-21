@@ -22,7 +22,7 @@ async function seed() {
     gradient: p.gradient,
   }));
 
-  await db.insert(property).values(values).onConflictDoNothing();
+  await db().insert(property).values(values).onConflictDoNothing();
   console.log(`Seeded ${values.length} properties`);
 }
 

@@ -8,7 +8,7 @@ export async function PUT(
   { params }: { params: Promise<{ id: string }> },
 ) {
   const { id } = await params;
-  await db
+  await db()
     .update(notification)
     .set({ read: "true" })
     .where(eq(notification.id, id));

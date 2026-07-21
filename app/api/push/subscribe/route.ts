@@ -9,13 +9,13 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "Missing endpoint or keys" }, { status: 400 });
   }
 
-  const existing = await db
+  const existing = await db()
     .select()
     .from(pushSubscription)
     .where(eq(pushSubscription.endpoint, endpoint));
 
   if (existing.length === 0) {
-    await db.insert(pushSubscription).values({
+    await db().insert(pushSubscription).values({
       id: crypto.randomUUID(),
       endpoint,
       keys: JSON.stringify(keys),

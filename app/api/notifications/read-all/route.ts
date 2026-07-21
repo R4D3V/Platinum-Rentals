@@ -4,7 +4,7 @@ import { notification } from "@/lib/db-schema";
 import { eq } from "drizzle-orm";
 
 export async function POST() {
-  await db
+  await db()
     .update(notification)
     .set({ read: "true" })
     .where(eq(notification.read, "false"));

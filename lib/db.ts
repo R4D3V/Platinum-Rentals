@@ -10,6 +10,15 @@ if (typeof process.loadEnvFile === "function") {
   }
 }
 
-const sql = neon(process.env.DATABASE_URL!);
+function getDb() {
+  const url = process.env.DATABASE_URL;
+  if (!url) throw new Error("DATABASE_URL is not set");
+  const sql = neon(url);
+  return drizzle(sql, { schema });
+}
 
-export const db = drizzle(sql, { schema });
+let cached: ReturnType<typeof getDb> | null = null;
+export function db() {
+  if (!cached) cached = getDb();
+  return cached;
+}
