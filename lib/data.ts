@@ -294,5 +294,5 @@ export async function getSimilarProperties(property: Property): Promise<Property
 }
 
 export function formatPrice(price: number): string {
-  return `UGX ${(price / 1000000).toFixed(1)}M`;
+  return `UGX ${price.toLocaleString("en-UG")}`;
 }

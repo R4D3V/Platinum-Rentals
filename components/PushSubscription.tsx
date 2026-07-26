@@ -4,7 +4,7 @@ import { useEffect } from "react";
 
 export default function PushSubscription() {
   useEffect(() => {
-    if (!("serviceWorker" in navigator) || !("PushManager" in window)) return;
+    if (!("serviceWorker" in navigator) || !("PushManager" in window) || !("Notification" in window)) return;
 
     async function register() {
       try {
@@ -23,14 +23,22 @@ export default function PushSubscription() {
           return;
         }
 
-        const permission = await Notification.requestPermission();
-        if (permission !== "granted") return;
+        if (Notification.permission === "granted") {
+          // already granted, skip prompt
+        } else {
+          const permission = await Notification.requestPermission();
+          if (permission !== "granted") return;
+        }
+
+        const publicKey = process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY;
+        if (!publicKey) {
+          console.warn("[PushSubscription] NEXT_PUBLIC_VAPID_PUBLIC_KEY is not set");
+          return;
+        }
 
         const sub = await reg.pushManager.subscribe({
           userVisibleOnly: true,
-          applicationServerKey: urlBase64ToUint8Array(
-            process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY!,
-          ),
+          applicationServerKey: urlBase64ToUint8Array(publicKey),
         });
 
         await fetch("/api/push/subscribe", {
@@ -41,8 +49,8 @@ export default function PushSubscription() {
             keys: sub.toJSON().keys,
           }),
         });
-      } catch {
-        // silently fail — push is non-critical
+      } catch (err) {
+        console.error("[PushSubscription] subscription failed:", err);
       }
     }
 

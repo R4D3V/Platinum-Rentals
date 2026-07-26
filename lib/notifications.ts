@@ -11,9 +11,7 @@ function ensureVapid() {
     !process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY ||
     !process.env.VAPID_PRIVATE_KEY
   ) {
-    console.warn("[notifications] VAPID env vars not set; skipping push");
-    vapidInitialized = true;
-    return;
+    throw new Error("VAPID env vars not set");
   }
   vapidInitialized = true;
   webpush.setVapidDetails(

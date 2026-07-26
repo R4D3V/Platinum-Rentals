@@ -77,7 +77,7 @@ export default async function PropertyDetailPage({
   ];
 
   const detailRows: [string, string][] = [
-    ["Property ID", property.propertyId],
+    // ["Property ID", property.propertyId],
     ["Type", property.type],
     ["Status", property.status],
     [

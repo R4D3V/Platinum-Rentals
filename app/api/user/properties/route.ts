@@ -69,11 +69,15 @@ export async function POST(request: Request) {
 
   const created = row[0];
 
-  sendPushNotifications(
-    `New Listing: ${created.title}`,
-    `${created.type} — UGX ${created.price.toLocaleString("en-UG")}`,
-    `/properties/${created.id}`,
-  ).catch(() => {});
+  try {
+    await sendPushNotifications(
+      `New Listing: ${created.title}`,
+      `${created.type} — UGX ${created.price.toLocaleString("en-UG")}`,
+      `/properties/${created.id}`,
+    );
+  } catch (err) {
+    console.error("[notifications] failed to send push:", err);
+  }
 
   return NextResponse.json(created, { status: 201 });
 }
