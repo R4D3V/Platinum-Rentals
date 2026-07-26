@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Inter, Manrope } from "next/font/google";
 import Script from "next/script";
+import { Analytics } from "@vercel/analytics/next";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import PushSubscription from "@/components/PushSubscription";
@@ -128,6 +129,7 @@ export default function RootLayout({
         {children}
         <Footer />
         <PushSubscription />
+        <Analytics />
         <Script
           id="register-sw"
           strategy="afterInteractive"
