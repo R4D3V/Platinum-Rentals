@@ -39,9 +39,9 @@ export default function PropertyGallery({
   const thumbnails = Array.from({ length: totalImages }, (_, i) => i);
 
   return (
-    <div className="min-w-0 w-full space-y-3">
+    <div className="min-w-0 w-full lg:flex lg:gap-4">
       {/* Main image */}
-      <div className="relative aspect-[4/3] min-w-0 overflow-hidden rounded-2xl sm:aspect-auto sm:h-[30rem] sm:rounded-3xl">
+      <div className="relative aspect-[4/3] min-w-0 overflow-hidden rounded-2xl sm:aspect-auto sm:h-[30rem] sm:rounded-3xl lg:flex-1">
         {images[active] ? (
           <Image
             src={images[active]}
@@ -64,7 +64,7 @@ export default function PropertyGallery({
               onClick={() =>
                 setActive(active === 0 ? totalImages - 1 : active - 1)
               }
-              className="absolute left-3 top-1/2 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full bg-black/30 text-white backdrop-blur-sm transition hover:bg-black/50 sm:left-4 sm:h-11 sm:w-11"
+              className="absolute left-3 top-1/2 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full bg-black/30 text-white backdrop-blur-sm transition hover:bg-black/50 sm:left-4 sm:h-11 sm:w-11 lg:hidden"
               aria-label="Previous image"
             >
               <ChevronLeft size={20} />
@@ -73,7 +73,7 @@ export default function PropertyGallery({
               onClick={() =>
                 setActive(active === totalImages - 1 ? 0 : active + 1)
               }
-              className="absolute right-3 top-1/2 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full bg-black/30 text-white backdrop-blur-sm transition hover:bg-black/50 sm:right-4 sm:h-11 sm:w-11"
+              className="absolute right-3 top-1/2 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full bg-black/30 text-white backdrop-blur-sm transition hover:bg-black/50 sm:right-4 sm:h-11 sm:w-11 lg:hidden"
               aria-label="Next image"
             >
               <ChevronRight size={20} />
@@ -87,15 +87,15 @@ export default function PropertyGallery({
         </div>
       </div>
 
-      {/* Thumbnail strip */}
+      {/* Thumbnails — row on mobile, column on large screens */}
       {totalImages > 1 && (
-        <div className="relative">
-          <div className="flex snap-x snap-mandatory gap-2 overflow-x-auto pb-1">
+        <div className="relative mt-3 lg:mt-0">
+          <div className="flex snap-x snap-mandatory gap-2 overflow-x-auto pb-1 lg:flex-col lg:overflow-y-auto lg:h-[30rem] lg:w-28">
             {thumbnails.map((i) => (
               <button
                 key={i}
                 onClick={() => setActive(i)}
-                className="relative h-16 w-20 shrink-0 snap-start overflow-hidden rounded-xl transition-all duration-200 sm:h-20 sm:w-24"
+                className="relative h-16 w-20 shrink-0 snap-start overflow-hidden rounded-xl transition-all duration-200 sm:h-20 sm:w-24 lg:h-20 lg:w-full"
                 style={{
                   boxShadow:
                     active === i

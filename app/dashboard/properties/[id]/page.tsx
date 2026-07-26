@@ -54,6 +54,7 @@ export default function EditListingPage({
       availableFrom: propertyData.availableFrom ?? undefined,
       gradient: propertyData.gradient,
       images: propertyData.images ?? [],
+      featured: propertyData.featured ?? false,
     });
   }
 
@@ -165,9 +166,10 @@ export default function EditListingPage({
 
           <CldUploadWidget
             uploadPreset="platinum-rentals"
+            options={{ multiple: true }}
             onSuccess={(result) => {
               const url = (result as any).info?.secure_url;
-              if (url) setForm({ ...form, images: [...form.images, url] });
+              if (url) setForm((prev) => prev && { ...prev, images: [...prev.images, url] });
             }}
           >
             {({ open }) => (
@@ -318,6 +320,23 @@ export default function EditListingPage({
             value={form.size}
             onChange={(e) => setForm({ ...form, size: Number(e.target.value) })}
           />
+        </div>
+
+        <div>
+          <label className="mb-1 block text-xs font-semibold uppercase tracking-wide" style={{ color: "var(--color-ink-faint)" }}>
+            Featured
+          </label>
+          <label className="surface-raised flex cursor-pointer items-center gap-3 rounded-xl px-4 py-3 text-sm">
+            <input
+              type="checkbox"
+              className="h-4 w-4 rounded accent-current"
+              checked={form.featured}
+              onChange={(e) => setForm({ ...form, featured: e.target.checked })}
+            />
+            <span style={{ color: "var(--color-ink-soft)" }}>
+              {form.featured ? "Listed as featured" : "Mark as featured"}
+            </span>
+          </label>
         </div>
 
         <div>

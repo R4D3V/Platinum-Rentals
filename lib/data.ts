@@ -16,6 +16,7 @@ export interface Property {
   availableFrom?: string;
   gradient: string;
   images: string[];
+  featured?: boolean;
   landlordId?: string;
 }
 
@@ -214,6 +215,7 @@ export async function getAllProperties(): Promise<Property[]> {
     availableFrom: row.availableFrom ?? undefined,
     gradient: row.gradient,
     images: row.images ?? [],
+    featured: row.featured ?? false,
     landlordId: row.landlordId ?? undefined,
   }));
 }
@@ -246,6 +248,7 @@ export async function getPropertyById(id: string): Promise<Property | undefined>
     availableFrom: row.availableFrom ?? undefined,
     gradient: row.gradient,
     images: row.images ?? [],
+    featured: row.featured ?? false,
     landlordId: row.landlordId ?? undefined,
   };
 }
@@ -285,6 +288,7 @@ export async function getSimilarProperties(property: Property): Promise<Property
     availableFrom: row.availableFrom ?? undefined,
     gradient: row.gradient,
     images: row.images ?? [],
+    featured: row.featured ?? false,
     landlordId: row.landlordId ?? undefined,
   }));
 }

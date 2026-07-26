@@ -54,8 +54,14 @@ export default async function PropertyDetailPage({
 
   const similar = await getSimilarProperties(property);
 
+  const propertyUrl = `${process.env.NEXT_PUBLIC_APP_URL}/properties/${property.id}`;
+
   const whatsappMessage = encodeURIComponent(
-    `Hello Platinum Rentals, I'm interested in the property: ${property.title} (${property.area}). Is it still available?`,
+    [
+      `Hello Platinum Rentals, I'm interested in the property: ${property.title} (${property.area}). Is it still available?`,
+      "",
+      `Property Link: ${propertyUrl}`,
+    ].join("\n"),
   );
 
   const stats = [
@@ -269,49 +275,21 @@ export default async function PropertyDetailPage({
               </div>
             </FadeIn>
 
-            <FadeIn direction="right" delay={150}>
-              <div className="surface-raised-lg sticky top-24 rounded-3xl p-6 sm:p-8">
-                <h3
-                  className="text-sm font-bold uppercase tracking-wider"
-                  style={{ color: "var(--color-accent)" }}
-                >
-                  Quick Facts
-                </h3>
-                <div className="mt-5 space-y-3">
-                  {detailRows.slice(0, 6).map(([label, value]) => (
-                    <div
-                      key={label}
-                      className="flex items-center justify-between border-b pb-2.5"
-                      style={{
-                        borderColor: "var(--color-shadow-dark)",
-                      }}
-                    >
-                      <span
-                        className="text-xs font-medium"
-                        style={{ color: "var(--color-ink-faint)" }}
-                      >
-                        {label}
-                      </span>
-                      <span className="text-right text-xs font-semibold">
-                        {value}
-                      </span>
-                    </div>
-                  ))}
-                </div>
-
-                {property.status === "Available" && (
+            {property.status === "Available" && (
+              <FadeIn direction="right" delay={150}>
+                <div className="surface-raised-lg sticky top-24 rounded-3xl p-6 sm:p-8 hidden sm:block">
                   <a
                     href={`https://wa.me/${WHATSAPP_NUMBER}?text=${whatsappMessage}`}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="btn-neu-accent mt-6 flex w-full items-center justify-center gap-2 rounded-2xl py-3.5 text-sm font-bold tracking-wide text-white"
+                    className="btn-neu-accent flex w-full items-center justify-center gap-2 rounded-2xl py-3.5 text-sm font-bold tracking-wide text-white"
                   >
                     <MessageCircle size={18} />
                     Contact for Viewing
                   </a>
-                )}
-              </div>
-            </FadeIn>
+                </div>
+              </FadeIn>
+            )}
           </div>
         </div>
       </section>
@@ -421,23 +399,25 @@ export default async function PropertyDetailPage({
       <LandlordCta />
 
       {/* Sticky Mobile CTA */}
-      <div
-        className="fixed bottom-0 left-0 right-0 z-50 border-t p-4 backdrop-blur-xl sm:hidden"
-        style={{
-          backgroundColor: "rgba(var(--glass-tint), 0.95)",
-          borderColor: "var(--glass-border)",
-        }}
-      >
-        <a
-          href={`https://wa.me/${WHATSAPP_NUMBER}?text=${whatsappMessage}`}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="btn-neu-accent flex w-full items-center justify-center gap-2 rounded-2xl py-3.5 text-sm font-bold tracking-wide text-white"
+      {property.status === "Available" && (
+        <div
+          className="fixed bottom-0 left-0 right-0 z-50 border-t p-4 backdrop-blur-xl sm:hidden"
+          style={{
+            backgroundColor: "rgba(var(--glass-tint), 0.95)",
+            borderColor: "var(--glass-border)",
+          }}
         >
-          <MessageCircle size={18} />
-          Contact for Viewing
-        </a>
-      </div>
+          <a
+            href={`https://wa.me/${WHATSAPP_NUMBER}?text=${whatsappMessage}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="btn-neu-accent flex w-full items-center justify-center gap-2 rounded-2xl py-3.5 text-sm font-bold tracking-wide text-white"
+          >
+            <MessageCircle size={18} />
+            Contact for Viewing
+          </a>
+        </div>
+      )}
     </main>
   );
 }

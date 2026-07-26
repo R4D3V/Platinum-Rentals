@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect, useRef } from "react";
 import useSWR from "swr";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
@@ -13,9 +13,12 @@ import {
   Save,
   Trash2,
   Upload,
+  Plus,
+  MinusCircle,
 } from "lucide-react";
 import { CldUploadWidget } from "next-cloudinary";
 import { fetcher } from "@/lib/fetcher";
+import { AREAS } from "@/components/AreasWeServe";
 
 const TYPES = ["Apartment", "Villa", "Townhouse", "Studio", "Commercial"] as const;
 const STATUSES = ["Available", "Let", "Under Offer"] as const;
@@ -38,6 +41,7 @@ const INITIAL_FORM = {
   availableFrom: undefined as string | undefined,
   gradient: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
   images: [] as string[],
+  featured: false,
 };
 
 export default function NewPropertyPage() {
@@ -45,6 +49,11 @@ export default function NewPropertyPage() {
   const [form, setForm] = useState(INITIAL_FORM);
   const [saving, setSaving] = useState(false);
   const [featureInput, setFeatureInput] = useState("");
+  const [areaInput, setAreaInput] = useState("");
+  const [areaList, setAreaList] = useState<string[]>([]);
+  const areasInitialized = useRef(false);
+  const [typeList, setTypeList] = useState<string[]>([...TYPES]);
+  const [typeInput, setTypeInput] = useState("");
 
   const { data: allProperties = [] } = useSWR<{ area: string; location: string }[]>("/api/properties", fetcher);
 
@@ -58,10 +67,53 @@ export default function NewPropertyPage() {
     },
   });
 
+  useEffect(() => {
+    if (allProperties.length > 0 && !areasInitialized.current) {
+      areasInitialized.current = true;
+      const defaultAreas = [
+        ...new Set([
+          ...AREAS.map((a) => a.name),
+          ...allProperties.map((p) => p.area),
+        ]),
+      ].sort();
+      setAreaList(defaultAreas);
+    }
+  }, [allProperties]);
+
   const areas = useMemo(
-    () => [...new Set(allProperties.map((p) => p.area))].sort(),
-    [allProperties],
+    () => [...new Set([...areaList, ...allProperties.map((p) => p.area)])].sort(),
+    [areaList, allProperties],
   );
+
+  function addArea() {
+    const val = areaInput.trim();
+    if (!val || areas.includes(val)) return;
+    setAreaList((prev) => [...prev, val].sort());
+    setAreaInput("");
+    setForm((f) => ({ ...f, area: val, location: val }));
+  }
+
+  function removeArea(area: string) {
+    setAreaList((prev) => prev.filter((a) => a !== area));
+    if (form.area === area) {
+      setForm((f) => ({ ...f, area: "", location: "" }));
+    }
+  }
+
+  function addType() {
+    const val = typeInput.trim();
+    if (!val || typeList.includes(val)) return;
+    setTypeList((prev) => [...prev, val]);
+    setTypeInput("");
+    setForm((f) => ({ ...f, type: val as any }));
+  }
+
+  function removeType(type: string) {
+    setTypeList((prev) => prev.filter((t) => t !== type));
+    if (form.type === type) {
+      setForm((f) => ({ ...f, type: "" as any }));
+    }
+  }
 
   async function handleSave() {
     setSaving(true);
@@ -152,9 +204,10 @@ export default function NewPropertyPage() {
           {/* Upload button */}
           <CldUploadWidget
             uploadPreset="platinum-rentals"
+            options={{ multiple: true }}
             onSuccess={(result) => {
               const url = (result as any).info?.secure_url;
-              if (url) setForm({ ...form, images: [...form.images, url] });
+              if (url) setForm((prev) => ({ ...prev, images: [...prev.images, url] }));
             }}
           >
             {({ open }) => (
@@ -228,10 +281,50 @@ export default function NewPropertyPage() {
             value={form.type}
             onChange={(e) => setForm({ ...form, type: e.target.value as any })}
           >
-            {TYPES.map((t) => (
+            <option value="">Select type...</option>
+            {typeList.map((t) => (
               <option key={t} value={t}>{t}</option>
             ))}
           </select>
+          <div className="mt-2 flex flex-wrap gap-1.5">
+            {typeList.map((t) => (
+              <span
+                key={t}
+                className="surface-raised inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-xs font-medium"
+              >
+                {t}
+                <button
+                  type="button"
+                  onClick={() => removeType(t)}
+                  className="opacity-50 hover:opacity-100"
+                >
+                  <MinusCircle size={12} />
+                </button>
+              </span>
+            ))}
+          </div>
+          <div className="mt-2 flex gap-2">
+            <input
+              className="input-neu flex-1 rounded-xl px-3 py-1.5 text-xs"
+              placeholder="Add new type..."
+              value={typeInput}
+              onChange={(e) => setTypeInput(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  e.preventDefault();
+                  addType();
+                }
+              }}
+            />
+            <button
+              type="button"
+              onClick={addType}
+              className="btn-neu flex items-center gap-1 rounded-xl px-2.5 py-1.5 text-xs font-semibold"
+            >
+              <Plus size={12} />
+              Add
+            </button>
+          </div>
         </div>
 
         <div>
@@ -311,6 +404,23 @@ export default function NewPropertyPage() {
 
         <div>
           <label className="mb-1 block text-xs font-semibold uppercase tracking-wide" style={{ color: "var(--color-ink-faint)" }}>
+            Featured
+          </label>
+          <label className="surface-raised flex cursor-pointer items-center gap-3 rounded-xl px-4 py-3 text-sm">
+            <input
+              type="checkbox"
+              className="h-4 w-4 rounded accent-current"
+              checked={form.featured}
+              onChange={(e) => setForm({ ...form, featured: e.target.checked })}
+            />
+            <span style={{ color: "var(--color-ink-soft)" }}>
+              {form.featured ? "Listed as featured" : "Mark as featured"}
+            </span>
+          </label>
+        </div>
+
+        <div>
+          <label className="mb-1 block text-xs font-semibold uppercase tracking-wide" style={{ color: "var(--color-ink-faint)" }}>
             Area
           </label>
           <select
@@ -323,6 +433,45 @@ export default function NewPropertyPage() {
               <option key={a} value={a}>{a}</option>
             ))}
           </select>
+          <div className="mt-2 flex flex-wrap gap-1.5">
+            {areaList.map((a) => (
+              <span
+                key={a}
+                className="surface-raised inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-xs font-medium"
+              >
+                {a}
+                <button
+                  type="button"
+                  onClick={() => removeArea(a)}
+                  className="opacity-50 hover:opacity-100"
+                >
+                  <MinusCircle size={12} />
+                </button>
+              </span>
+            ))}
+          </div>
+          <div className="mt-2 flex gap-2">
+            <input
+              className="input-neu flex-1 rounded-xl px-3 py-1.5 text-xs"
+              placeholder="Add new area..."
+              value={areaInput}
+              onChange={(e) => setAreaInput(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  e.preventDefault();
+                  addArea();
+                }
+              }}
+            />
+            <button
+              type="button"
+              onClick={addArea}
+              className="btn-neu flex items-center gap-1 rounded-xl px-2.5 py-1.5 text-xs font-semibold"
+            >
+              <Plus size={12} />
+              Add
+            </button>
+          </div>
         </div>
 
         <div>

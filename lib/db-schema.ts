@@ -96,6 +96,7 @@ export const property = pgTable("property", {
   availableFrom: text("available_from"),
   gradient: text("gradient").notNull(),
   images: text("images").array().default([]).notNull(),
+  featured: boolean("featured").default(false).notNull(),
   landlordId: text("landlord_id").references(() => user.id),
 });
 

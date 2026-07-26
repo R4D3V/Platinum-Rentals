@@ -47,6 +47,7 @@ export async function POST(request: Request) {
       availableFrom: body.availableFrom ?? null,
       gradient: body.gradient,
       images: body.images ?? [],
+      featured: body.featured ?? false,
       landlordId: body.landlordId ?? null,
     })
     .returning();

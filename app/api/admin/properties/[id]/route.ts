@@ -45,6 +45,7 @@ export async function PUT(
       availableFrom: body.availableFrom ?? null,
       gradient: body.gradient,
       images: body.images ?? [],
+      featured: body.featured ?? false,
     })
     .where(eq(property.id, id))
     .returning();

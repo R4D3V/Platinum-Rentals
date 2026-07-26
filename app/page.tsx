@@ -1,8 +1,8 @@
 import Hero from "@/components/Hero";
 import TrustBar from "@/components/TrustBar";
 import FeaturedProperties from "@/components/FeaturedProperties";
-import AllProperties from "@/components/AllProperties";
-import PropertyCategories from "@/components/PropertyCategories";
+
+
 import WhyChooseHome from "@/components/WhyChooseHome";
 import LandlordCta from "@/components/LandlordCta";
 import ExploreAreasHome from "@/components/ExploreAreasHome";
@@ -16,8 +16,8 @@ export default function Home() {
       <Hero />
       <TrustBar />
       <FeaturedProperties />
-      <AllProperties />
-      <PropertyCategories />
+
+
       <WhyChooseHome />
       <LandlordCta />
       <ExploreAreasHome />

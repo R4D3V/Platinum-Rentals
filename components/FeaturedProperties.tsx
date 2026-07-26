@@ -6,7 +6,7 @@ import { getAllProperties } from "@/lib/data";
 
 export default async function FeaturedProperties() {
   const all = await getAllProperties();
-  const featured = all.filter((p) => p.status === "Available").slice(0, 3);
+  const featured = all.filter((p) => p.featured).slice(0, 3);
 
   return (
     <section className="px-4 py-16 sm:px-6 lg:px-10">
