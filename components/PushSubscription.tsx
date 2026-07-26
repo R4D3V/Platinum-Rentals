@@ -17,7 +17,15 @@ export default function PushSubscription() {
   const subscribe = useCallback(async () => {
     if (!canNotify) return;
     try {
-      const reg = await navigator.serviceWorker.ready;
+      await navigator.serviceWorker.register("/sw.js");
+
+      const timeout = new Promise((_, reject) =>
+        setTimeout(() => reject(new Error("SW ready timed out")), 15000),
+      );
+      const reg = await Promise.race([
+        navigator.serviceWorker.ready,
+        timeout,
+      ]) as ServiceWorkerRegistration;
       const existing = await reg.pushManager.getSubscription();
 
       if (existing) {
