@@ -106,7 +106,18 @@ export default function Footer() {
               &copy; {new Date().getFullYear()} Platinum Rentals. All rights
               reserved.
             </p>
-            <p>Kampala, Uganda</p>
+            <p>
+              Kampala, Uganda &mdash;{" "}
+              <a
+                href="https://raymonjohns.vercel.app/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="hover:underline"
+                style={{ color: "var(--color-accent)" }}
+              >
+                Built with ❤️ by RJ
+              </a>
+            </p>
           </div>
         </div>
       </FadeIn>
