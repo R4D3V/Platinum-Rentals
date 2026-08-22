@@ -3,15 +3,25 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useState, useEffect } from "react";
-import { Menu, X, Lock, LogOut, Sun, Moon, LayoutDashboard } from "lucide-react";
+import {
+  Menu,
+  X,
+  Lock,
+  LogOut,
+  Sun,
+  Moon,
+  LayoutDashboard,
+} from "lucide-react";
 import { useSession, signOut } from "@/lib/auth-client";
 
 const NAV_LINKS = [
   { label: "Home", href: "/" },
+  { label: "Properties", href: "/properties" },
+  { label: "Land", href: "/land" },
+  // { label: "Services", href: "/services" },
+  // { label: "Why Us", href: "/why-us" },
+  // { label: "How It Works", href: "/how-it-works" },
   { label: "About", href: "/about" },
-  { label: "Services", href: "/services" },
-  { label: "Why Us", href: "/why-us" },
-  { label: "How It Works", href: "/how-it-works" },
   { label: "Contact", href: "/contact" },
 ];
 
@@ -41,8 +51,8 @@ export default function Header() {
       <div className="mx-auto flex max-w-6xl items-center justify-between rounded-2xl surface-raised px-4 py-3 sm:px-6">
         <Link href="/" className="flex items-center gap-2">
           <Image
-            src="/logo/platinum-rentals-logo-full.svg"
-            alt="Platinum Rentals"
+            src="/logo/ninety-nine-logo-full.png"
+            alt="Ninety Nine Property Consultants"
             width={168}
             height={76}
             className={`h-10 w-auto sm:h-12 ${dark ? " brightness-0 invert" : ""}`}
@@ -50,7 +60,7 @@ export default function Header() {
           />
         </Link>
 
-        <nav className="hidden items-center gap-1 lg:flex">
+        <nav className="hidden items-center gap-1 lg:flex uppercase">
           {NAV_LINKS.map((link) => (
             <Link
               key={link.href}

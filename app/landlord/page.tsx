@@ -54,8 +54,8 @@ export default function LandlordPage() {
 
                   <div className="mt-12 hidden lg:block">
                     <Image
-                      src="/logo/platinum-rentals-logo-full.svg"
-                      alt="Platinum Rentals"
+                      src="/logo/ninety-nine-logo-full.png"
+                      alt="Ninety Nine Property Consultants"
                       width={168}
                       height={76}
                       className="h-12 w-auto rounded-xl bg-white p-2"
@@ -91,7 +91,7 @@ export default function LandlordPage() {
                         const description = data.get("description") || "—";
                         const email = data.get("email") || "—";
                         return [
-                          "Hello Platinum Rentals, I'd like to submit my property.",
+                          "Hello Ninety Nine Property Consultants, I'd like to submit my property.",
                           `Name: ${name}`,
                           `Property Description: ${description}`,
                           `Email: ${email}`,

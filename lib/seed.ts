@@ -1,6 +1,6 @@
-import { SAMPLE_PROPERTIES } from "./data";
+import { SAMPLE_PROPERTIES, SAMPLE_LANDS } from "./data";
 import { db } from "./db";
-import { property } from "./db-schema";
+import { property, land } from "./db-schema";
 
 async function seed() {
   const values = SAMPLE_PROPERTIES.map((p) => ({
@@ -24,6 +24,25 @@ async function seed() {
 
   await db().insert(property).values(values).onConflictDoNothing();
   console.log(`Seeded ${values.length} properties`);
+
+  const landValues = SAMPLE_LANDS.map((l) => ({
+    id: l.id,
+    landId: l.landId,
+    title: l.title,
+    landType: l.landType,
+    price: l.price,
+    size: l.size,
+    location: l.location,
+    area: l.area,
+    description: l.description,
+    features: l.features,
+    status: l.status,
+    titleDocument: l.titleDocument,
+    gradient: l.gradient,
+  }));
+
+  await db().insert(land).values(landValues).onConflictDoNothing();
+  console.log(`Seeded ${landValues.length} lands`);
 }
 
 seed()

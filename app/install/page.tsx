@@ -75,7 +75,7 @@ function ChromeBar() {
         <div className="h-1 w-1 rounded-full bg-gray-300" />
       </div>
       <div className="flex-1 rounded bg-gray-100 px-2 py-0.5 text-[6px] text-gray-400 truncate">
-        platinumrentals.ug
+        ninetyninepropertyconsultants.ug
       </div>
       <div className="h-3 w-3 rounded-full border border-gray-300 flex items-center justify-center">
         <div className="h-1 w-1 rounded-full bg-gray-300" />
@@ -103,10 +103,10 @@ function InstallDialog() {
     <div className="absolute inset-0 flex items-center justify-center bg-black/20 z-10">
       <div className="mx-4 w-full max-w-[140px] rounded-xl bg-white p-3 shadow-xl">
         <div className="flex items-center gap-2">
-          <div className="h-6 w-6 rounded-lg bg-red-600 flex items-center justify-center text-white text-[6px] font-bold">PR</div>
+          <div className="h-6 w-6 rounded-lg bg-red-600 flex items-center justify-center text-white text-[6px] font-bold">NN</div>
           <div className="flex-1 min-w-0">
-            <p className="text-[7px] font-bold leading-tight">Platinum Rentals</p>
-            <p className="text-[6px] text-gray-400">platinumrentals.ug</p>
+            <p className="text-[7px] font-bold leading-tight">Ninety Nine</p>
+            <p className="text-[6px] text-gray-400">ninetyninepropertyconsultants.ug</p>
           </div>
         </div>
         <p className="mt-2 text-[7px] text-gray-600">Add to Home screen?</p>
@@ -143,14 +143,14 @@ function ShareSheet() {
 const ANDROID_STEPS = [
   {
     title: "Open in Chrome",
-    desc: 'Launch Platinum Rentals in the Google Chrome browser on your Android device.',
+    desc: 'Launch Ninety Nine in the Google Chrome browser on your Android device.',
     screen: (
       <>
         <StatusBar />
         <ChromeBar />
         <div className="flex-1 flex flex-col items-center justify-center px-4 text-center">
-          <div className="h-5 w-5 rounded bg-red-600 flex items-center justify-center text-white text-[5px] font-bold mb-1">PR</div>
-          <p className="text-[7px] font-bold text-gray-800">Platinum Rentals</p>
+          <div className="h-5 w-5 rounded bg-red-600 flex items-center justify-center text-white text-[5px] font-bold mb-1">NN</div>
+          <p className="text-[7px] font-bold text-gray-800">Ninety Nine</p>
           <p className="text-[6px] text-gray-400 mt-0.5">Property Management</p>
           <div className="mt-2 h-6 w-full rounded bg-gray-50" />
           <div className="mt-1 h-6 w-3/4 rounded bg-gray-50" />
@@ -171,8 +171,8 @@ const ANDROID_STEPS = [
         <StatusBar />
         <ChromeBar />
         <div className="flex-1 flex flex-col items-center justify-center px-4 text-center">
-          <div className="h-5 w-5 rounded bg-red-600 flex items-center justify-center text-white text-[5px] font-bold mb-1">PR</div>
-          <p className="text-[7px] font-bold text-gray-800">Platinum Rentals</p>
+          <div className="h-5 w-5 rounded bg-red-600 flex items-center justify-center text-white text-[5px] font-bold mb-1">NN</div>
+          <p className="text-[7px] font-bold text-gray-800">Ninety Nine</p>
         </div>
         <div className="absolute right-1 top-9">
           <div className="h-5 w-5 rounded-full bg-red-100 flex items-center justify-center">
@@ -199,8 +199,8 @@ const ANDROID_STEPS = [
         <StatusBar />
         <ChromeBar />
         <div className="flex-1 flex flex-col items-center justify-center px-4 text-center opacity-30">
-          <div className="h-5 w-5 rounded bg-red-600 flex items-center justify-center text-white text-[5px] font-bold mb-1">PR</div>
-          <p className="text-[7px] font-bold text-gray-800">Platinum Rentals</p>
+          <div className="h-5 w-5 rounded bg-red-600 flex items-center justify-center text-white text-[5px] font-bold mb-1">NN</div>
+          <p className="text-[7px] font-bold text-gray-800">Ninety Nine</p>
         </div>
         <div className="absolute right-1 top-9">
           <div className="h-5 w-5 rounded-full bg-red-100 flex items-center justify-center">
@@ -231,7 +231,7 @@ const ANDROID_STEPS = [
         <StatusBar />
         <ChromeBar />
         <div className="flex-1 flex flex-col items-center justify-center px-4 text-center opacity-20">
-          <div className="h-5 w-5 rounded bg-red-600 flex items-center justify-center text-white text-[5px] font-bold mb-1">PR</div>
+          <div className="h-5 w-5 rounded bg-red-600 flex items-center justify-center text-white text-[5px] font-bold mb-1">NN</div>
         </div>
         <InstallDialog />
         <div className="border-t border-gray-100 px-3 py-1.5 flex justify-around text-gray-400">
@@ -247,18 +247,18 @@ const ANDROID_STEPS = [
 const IOS_STEPS = [
   {
     title: "Open in Safari",
-    desc: "Launch Platinum Rentals in the Safari browser on your iPhone or iPad.",
+    desc: "Launch Ninety Nine in the Safari browser on your iPhone or iPad.",
     screen: (
       <>
         <StatusBar />
         <div className="flex items-center gap-1 px-2 py-1 border-b border-gray-100">
           <div className="flex-1 rounded bg-gray-100 px-2 py-0.5 text-[6px] text-gray-400 truncate text-center">
-            platinumrentals.ug
+            ninetyninepropertyconsultants.ug
           </div>
         </div>
         <div className="flex-1 flex flex-col items-center justify-center px-4 text-center">
-          <div className="h-5 w-5 rounded bg-red-600 flex items-center justify-center text-white text-[5px] font-bold mb-1">PR</div>
-          <p className="text-[7px] font-bold text-gray-800">Platinum Rentals</p>
+          <div className="h-5 w-5 rounded bg-red-600 flex items-center justify-center text-white text-[5px] font-bold mb-1">NN</div>
+          <p className="text-[7px] font-bold text-gray-800">Ninety Nine</p>
           <p className="text-[6px] text-gray-400 mt-0.5">Property Management</p>
           <div className="mt-2 h-6 w-full rounded bg-gray-50" />
           <div className="mt-1 h-6 w-3/4 rounded bg-gray-50" />
@@ -280,12 +280,12 @@ const IOS_STEPS = [
         <StatusBar />
         <div className="flex items-center gap-1 px-2 py-1 border-b border-gray-100">
           <div className="flex-1 rounded bg-gray-100 px-2 py-0.5 text-[6px] text-gray-400 truncate text-center">
-            platinumrentals.ug
+            ninetyninepropertyconsultants.ug
           </div>
         </div>
         <div className="flex-1 flex flex-col items-center justify-center px-4 text-center opacity-30">
-          <div className="h-5 w-5 rounded bg-red-600 flex items-center justify-center text-white text-[5px] font-bold mb-1">PR</div>
-          <p className="text-[7px] font-bold text-gray-800">Platinum Rentals</p>
+          <div className="h-5 w-5 rounded bg-red-600 flex items-center justify-center text-white text-[5px] font-bold mb-1">NN</div>
+          <p className="text-[7px] font-bold text-gray-800">Ninety Nine</p>
         </div>
         <div className="absolute bottom-6 left-1/2 -translate-x-1/2">
           <div className="h-6 w-6 rounded-full bg-red-100 flex items-center justify-center">
@@ -308,11 +308,11 @@ const IOS_STEPS = [
         <StatusBar />
         <div className="flex items-center gap-1 px-2 py-1 border-b border-gray-100">
           <div className="flex-1 rounded bg-gray-100 px-2 py-0.5 text-[6px] text-gray-400 truncate text-center">
-            platinumrentals.ug
+            ninetyninepropertyconsultants.ug
           </div>
         </div>
         <div className="flex-1 flex flex-col items-center justify-center px-4 text-center opacity-20">
-          <div className="h-5 w-5 rounded bg-red-600 flex items-center justify-center text-white text-[5px] font-bold mb-1">PR</div>
+          <div className="h-5 w-5 rounded bg-red-600 flex items-center justify-center text-white text-[5px] font-bold mb-1">NN</div>
         </div>
         <ShareSheet />
       </div>
@@ -330,9 +330,9 @@ const IOS_STEPS = [
           <span className="text-[7px] font-bold text-blue-500">Add</span>
         </div>
         <div className="flex-1 flex flex-col items-center justify-center px-6">
-          <div className="h-12 w-12 rounded-2xl bg-red-600 shadow-lg flex items-center justify-center text-white text-[8px] font-bold">PR</div>
-          <p className="mt-2 text-[8px] font-bold text-gray-800">Platinum Rentals</p>
-          <p className="text-[6px] text-gray-400">platinumrentals.ug</p>
+          <div className="h-12 w-12 rounded-2xl bg-red-600 shadow-lg flex items-center justify-center text-white text-[8px] font-bold">NN</div>
+          <p className="mt-2 text-[8px] font-bold text-gray-800">Ninety Nine</p>
+          <p className="text-[6px] text-gray-400">ninetyninepropertyconsultants.ug</p>
           <div className="mt-3 w-full rounded-lg bg-gray-50 px-3 py-2 text-center">
             <p className="text-[7px] text-gray-600">This will add the icon to your home screen for easy access.</p>
           </div>
@@ -372,7 +372,7 @@ export default function InstallPage() {
               className="mt-4 max-w-xl text-sm leading-relaxed"
               style={{ color: "var(--color-ink-soft)" }}
             >
-              Platinum Rentals is a Progressive Web App (PWA). Install it on
+              Ninety Nine Property Consultants is a Progressive Web App (PWA). Install it on
               your device for instant notifications on new listings, faster
               loading, and an app-like experience — no app store required.
             </p>

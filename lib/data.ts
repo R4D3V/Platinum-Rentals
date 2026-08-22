@@ -296,3 +296,250 @@ export async function getSimilarProperties(property: Property): Promise<Property
 export function formatPrice(price: number): string {
   return `UGX ${price.toLocaleString("en-UG")}`;
 }
+
+export interface Land {
+  id: string;
+  landId: string;
+  title: string;
+  landType: "Residential" | "Commercial" | "Agricultural" | "Mixed Use";
+  price: number;
+  size: number;
+  location: string;
+  area: string;
+  description: string;
+  features: string[];
+  status: "Available" | "Sold" | "Under Offer";
+  titleDocument: string;
+  gradient: string;
+  images: string[];
+  featured?: boolean;
+  landlordId?: string;
+}
+
+export const SAMPLE_LANDS: Land[] = [
+  {
+    id: "kololo-commercial-plot",
+    landId: "PL-1001",
+    title: "Prime Commercial Plot in Kololo",
+    landType: "Commercial",
+    price: 1500000000,
+    size: 25,
+    location: "Plot 8, Kololo Hill Lane",
+    area: "Kololo",
+    description:
+      "A prime commercial plot in the heart of Kololo, ideal for an office block, boutique hotel, or mixed-use development. Level, serviced, and ready for construction with clear title. Walking distance to embassies, banks, and Kololo Airstrip. High rental demand from corporate tenants.",
+    features: [
+      "Prime CBD-fringe commercial location",
+      "Level and serviced land",
+      "Clear title (Freehold)",
+      "Ideal for office, hotel, or mixed-use",
+      "Ready for immediate construction",
+      "Road frontage on tarmac",
+      "Water and power on site",
+      "High corporate tenant demand",
+    ],
+    status: "Available",
+    titleDocument: "Freehold",
+    gradient: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
+    images: [],
+  },
+  {
+    id: "ntinda-residential-plot",
+    landId: "PL-1002",
+    title: "Residential Plot in Ntinda",
+    landType: "Residential",
+    price: 350000000,
+    size: 12,
+    location: "Ntinda-Kisaasi Road",
+    area: "Ntinda",
+    description:
+      "A serviced residential plot in a gated community in Ntinda, perfect for a family home or apartment block. Secure perimeter, all-weather access, and easy reach of Metroplex Mall, schools, and the Northern Bypass. Title is ready for transfer.",
+    features: [
+      "Serviced and level plot",
+      "Gated community security",
+      "All-weather road access",
+      "Water, power, and fibre on site",
+      "Clear title ready for transfer",
+      "Close to schools and malls",
+      "No off-take fees",
+      "Ideal for a family home or flats",
+    ],
+    status: "Available",
+    titleDocument: "Freehold",
+    gradient: "linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)",
+    images: [],
+  },
+  {
+    id: "gayaza-farm-land",
+    landId: "PL-1003",
+    title: "5-Acre Farm Land in Gayaza",
+    landType: "Agricultural",
+    price: 250000000,
+    size: 500,
+    location: "Gayaza-Zirobwe Road",
+    area: "Gayaza",
+    description:
+      "A productive 5-acre farm plot along the Gayaza-Zirobwe corridor, ideal for mixed farming, poultry, or a weekend retreat. Fertile soil, natural water source, and good road access. Secure perimeter and clear leasehold title.",
+    features: [
+      "Fertile, productive soil",
+      "Natural water source on site",
+      "Good tarmac access",
+      "Ideal for mixed farming or poultry",
+      "Secure perimeter fencing",
+      "Rural zoning, low taxes",
+      "Clear title (Leasehold)",
+      "Close to Gayaza town",
+    ],
+    status: "Available",
+    titleDocument: "Leasehold",
+    gradient: "linear-gradient(135deg, #43e97b 0%, #38f9d7 100%)",
+    images: [],
+  },
+  {
+    id: "munyonyo-waterfront-land",
+    landId: "PL-1004",
+    title: "Waterfront Plot in Munyonyo",
+    landType: "Residential",
+    price: 800000000,
+    size: 50,
+    location: "Lake Victoria Shore, Munyonyo",
+    area: "Munyonyo",
+    description:
+      "A rare lakeside residential plot on the shores of Lake Victoria in Munyonyo. Breathtaking water views and direct lake frontage. Ideal for a private villa, holiday home, or boutique hotel. Freehold title available.",
+    features: [
+      "Direct Lake Victoria frontage",
+      "Unobstructed water views",
+      "Ideal for villa or boutique hotel",
+      "Freehold title available",
+      "Quiet, secure lakeside road",
+      "Borehole-ready",
+      "Close to Munyonyo Commonwealth Resort",
+      "High resale value",
+    ],
+    status: "Under Offer",
+    titleDocument: "Freehold",
+    gradient: "linear-gradient(135deg, #f093fb 0%, #f5576c 100%)",
+    images: [],
+  },
+  {
+    id: "kira-mixed-use-land",
+    landId: "PL-1005",
+    title: "Mixed-Use Land in Kira",
+    landType: "Mixed Use",
+    price: 450000000,
+    size: 100,
+    location: "Kira Road Extension",
+    area: "Kira",
+    description:
+      "A 1-acre mixed-use plot along Kira Road Extension, one of the fastest-growing residential and commercial corridors. Zoned for residential and commercial use, making it ideal for apartments with shops or a gated community. Infrastructure is fully serviced.",
+    features: [
+      "Mixed-use zoning (residential + commercial)",
+      "1 acre (100 decimals) plot",
+      "Fully serviced infrastructure",
+      "High-growth corridor",
+      "Ideal for apartments with retail",
+      "Clear title (Freehold)",
+      "Tarmac road frontage",
+      "Strong resale and rental demand",
+    ],
+    status: "Available",
+    titleDocument: "Freehold",
+    gradient: "linear-gradient(135deg, #fa709a 0%, #fee140 100%)",
+    images: [],
+  },
+];
+
+export async function getAllLands(): Promise<Land[]> {
+  const { db } = await import("./db");
+  const { land: landTable } = await import("./db-schema");
+  const rows = await db().select().from(landTable);
+  return rows.map((row) => ({
+    id: row.id,
+    landId: row.landId,
+    title: row.title,
+    landType: row.landType as Land["landType"],
+    price: row.price,
+    size: row.size,
+    location: row.location,
+    area: row.area,
+    description: row.description,
+    features: row.features,
+    status: row.status as Land["status"],
+    titleDocument: row.titleDocument,
+    gradient: row.gradient,
+    images: row.images ?? [],
+    featured: row.featured ?? false,
+    landlordId: row.landlordId ?? undefined,
+  }));
+}
+
+export async function getLandById(id: string): Promise<Land | undefined> {
+  const { db } = await import("./db");
+  const { land: landTable } = await import("./db-schema");
+  const { eq } = await import("drizzle-orm");
+  const rows = await db()
+    .select()
+    .from(landTable)
+    .where(eq(landTable.id, id));
+  const row = rows[0];
+  if (!row) return undefined;
+  return {
+    id: row.id,
+    landId: row.landId,
+    title: row.title,
+    landType: row.landType as Land["landType"],
+    price: row.price,
+    size: row.size,
+    location: row.location,
+    area: row.area,
+    description: row.description,
+    features: row.features,
+    status: row.status as Land["status"],
+    titleDocument: row.titleDocument,
+    gradient: row.gradient,
+    images: row.images ?? [],
+    featured: row.featured ?? false,
+    landlordId: row.landlordId ?? undefined,
+  };
+}
+
+export async function getSimilarLands(land: Land): Promise<Land[]> {
+  const { db } = await import("./db");
+  const { land: landTable } = await import("./db-schema");
+  const { eq, ne, or, and } = await import("drizzle-orm");
+  const rows = await db()
+    .select()
+    .from(landTable)
+    .where(
+      and(
+        ne(landTable.id, land.id),
+        or(
+          eq(landTable.area, land.area),
+          eq(landTable.landType, land.landType),
+        ),
+      ),
+    )
+    .limit(3);
+  return rows.map((row) => ({
+    id: row.id,
+    landId: row.landId,
+    title: row.title,
+    landType: row.landType as Land["landType"],
+    price: row.price,
+    size: row.size,
+    location: row.location,
+    area: row.area,
+    description: row.description,
+    features: row.features,
+    status: row.status as Land["status"],
+    titleDocument: row.titleDocument,
+    gradient: row.gradient,
+    images: row.images ?? [],
+    featured: row.featured ?? false,
+    landlordId: row.landlordId ?? undefined,
+  }));
+}
+
+export function formatLandSize(size: number): string {
+  return `${size} dec${size === 1 ? "" : "s"}`;
+}

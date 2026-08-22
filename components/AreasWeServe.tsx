@@ -91,7 +91,7 @@ export default function AreasWeServe() {
               </p>
             </div>
             <iframe
-              title="Platinum Rentals coverage area — Greater Kampala"
+              title="Ninety Nine Property Consultants coverage area — Greater Kampala"
               src="https://www.google.com/maps?q=Kampala,Uganda&z=11&output=embed"
               width="100%"
               height="380"

@@ -1,9 +1,9 @@
-# Platinum Rentals — Website
+# Ninety Nine Property Consultants — Website
 
-A Next.js 16 + Tailwind CSS 4.3 marketing site for Platinum Rentals, a Kampala property
-management company. Built in a neumorphic style: soft, embossed surfaces, raised buttons,
+A Next.js 16 + Tailwind CSS 4.3 marketing site for Ninety Nine Property Consultants, a Kampala property
+consultancy specialising in rental management and the sale of land. Built in a neumorphic style: soft, embossed surfaces, raised buttons,
 pressed input fields, and raised icon chips — all on one warm-neutral base with the brand's
-red (`#BF1B2C`, sampled from the logo) as the single accent.
+red (`#BE1D2C`, sampled from the logo) as the single accent.
 
 ## Stack
 
@@ -27,9 +27,9 @@ Open http://localhost:3000.
 | Route | Description |
 |---|---|
 | `/` | Home — hero with a WhatsApp-connected quick-enquiry form, trust bar, links out to the four pages below |
-| `/services` | Grid of all 8 services, each linking to its own detail page |
+| `/services` | Grid of all 10 services, each linking to its own detail page |
 | `/services/[slug]` | Full detail per service: overview, what's included, ideal-for, FAQs, related services |
-| `/why-us` | Six reasons landlords choose Platinum Rentals + an "Informal Caretaker vs. Platinum Rentals" comparison table |
+| `/why-us` | Six reasons landlords choose Ninety Nine Property Consultants + an "Informal Caretaker vs. Ninety Nine" comparison table |
 | `/how-it-works` | The 4-step onboarding process, each step with its own icon and illustration panel |
 | `/areas` | Per-neighbourhood detail cards + an embedded coverage map |
 | `/contact` | Contact info, embedded office map, and a WhatsApp-connected enquiry form |
@@ -50,7 +50,7 @@ src/
     globals.css              — design tokens + neumorphic utility classes
     icon.png                  — favicon (cropped from the logo mark)
     services/page.tsx          — services list
-    services/[slug]/page.tsx    — service detail (statically generated for all 8 slugs)
+    services/[slug]/page.tsx    — service detail (statically generated for all 10 slugs)
     why-us/page.tsx
     how-it-works/page.tsx
     areas/page.tsx
@@ -70,7 +70,7 @@ src/
     LandlordCta.tsx
     Footer.tsx
   lib/
-    services.ts        — data for all 8 services (title, icon, overview, included, FAQs...)
+    services.ts        — data for all 10 services (title, icon, overview, included, FAQs...)
     whatsapp.ts          — builds wa.me links; submitFormToWhatsApp() wires any <form> to it
 public/
   logo.png            — full logo, transparent background
@@ -87,7 +87,7 @@ All defined in `src/app/globals.css` under `@theme`:
 | `--color-surface` | `#eceef1` | Base neumorphic surface |
 | `--color-shadow-light` / `--color-shadow-dark` | `#ffffff` / `#c3c9d4` | Dual-shadow pairs for raised/pressed surfaces |
 | `--color-ink` | `#17181b` | Primary text |
-| `--color-accent` | `#bf1b2c` | Brand red, sampled directly from the logo |
+| `--color-accent` | `#be1d2c` | Brand red, sampled directly from the logo |
 
 Neumorphic utility classes (`.surface-raised`, `.surface-pressed`, `.btn-neu`,
 `.btn-neu-accent`, `.input-neu`, `.icon-chip`) live in the same file under `@layer components`

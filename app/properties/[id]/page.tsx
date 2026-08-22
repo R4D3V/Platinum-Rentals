@@ -38,7 +38,7 @@ export async function generateMetadata({
   const property = await getPropertyById(id);
   if (!property) return { title: "Property Not Found" };
   return {
-    title: `${property.title} | Platinum Rentals`,
+    title: `${property.title} | Ninety Nine Property Consultants`,
     description: property.description.slice(0, 160),
   };
 }
@@ -58,7 +58,7 @@ export default async function PropertyDetailPage({
 
   const whatsappMessage = encodeURIComponent(
     [
-      `Hello Platinum Rentals, I'm interested in the property: ${property.title} (${property.area}). Is it still available?`,
+      `Hello Ninety Nine Property Consultants, I'm interested in the property: ${property.title} (${property.area}). Is it still available?`,
       "",
       `Property Link: ${propertyUrl}`,
     ].join("\n"),

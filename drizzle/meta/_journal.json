@@ -43,6 +43,13 @@
       "when": 1785021059292,
       "tag": "0005_flimsy_dreadnoughts",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1787173369191,
+      "tag": "0006_sour_mole_man",
+      "breakpoints": true
     }
   ]
 }

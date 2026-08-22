@@ -27,13 +27,13 @@ export default function Contact({ prefillService }: { prefillService?: string })
                       <p className="font-semibold">+256 785 175160</p>
                     </div>
                   </a>
-                  <a href="mailto:info@platinumrentals.ug" className="flex items-center gap-4">
+                  <a href="mailto:info@ninetyninepropertyconsultants.ug" className="flex items-center gap-4">
                     <span className="icon-chip flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl">
                       <Mail size={20} style={{ color: "var(--color-accent)" }} />
                     </span>
                     <div>
                       <p className="text-xs font-semibold uppercase tracking-wide" style={{ color: "var(--color-ink-faint)" }}>Email</p>
-                      <p className="font-semibold">info@platinumrentals.ug</p>
+                      <p className="font-semibold">info@ninetyninepropertyconsultants.ug</p>
                     </div>
                   </a>
                   <div className="flex items-center gap-4">
@@ -54,7 +54,7 @@ export default function Contact({ prefillService }: { prefillService?: string })
 
               <div className="surface-raised overflow-hidden rounded-3xl">
                 <iframe
-                  title="Platinum Rentals office — Kampala, Uganda"
+                  title="Ninety Nine Property Consultants office — Kampala, Uganda"
                   src="https://www.google.com/maps?q=Kampala,Uganda&z=12&output=embed"
                   width="100%"
                   height="260"
@@ -76,7 +76,7 @@ export default function Contact({ prefillService }: { prefillService?: string })
                   const service = data.get("service") || "—";
                   const message = data.get("message") || "—";
                   return [
-                    "Hello Platinum Rentals, I have an enquiry.",
+                    "Hello Ninety Nine Property Consultants, I have an enquiry.",
                     `Name: ${name}`,
                     `Email: ${email}`,
                     `Service of interest: ${service}`,

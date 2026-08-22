@@ -19,7 +19,7 @@ export async function generateMetadata({
   const service = getServiceBySlug(slug);
   if (!service) return {};
   return {
-    title: `${service.title} | Platinum Rentals`,
+    title: `${service.title} | Ninety Nine Property Consultants`,
     description: service.summary,
   };
 }

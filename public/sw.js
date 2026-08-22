@@ -1,4 +1,4 @@
-const CACHE = "platinum-rentals-v1";
+const CACHE = "ninety-nine-property-consultants-v1";
 
 const STATIC_ASSETS = [
   "/",
@@ -16,13 +16,11 @@ const STATIC_ASSETS = [
   "/pwa-icons/apple-touch-icon.png",
   "/pwa-icons/apple-touch-icon-180x180.png",
   "/favicons/favicon.ico",
-  "/favicons/favicon.svg",
   "/favicons/favicon-16x16.png",
   "/favicons/favicon-32x32.png",
   "/favicons/favicon-48x48.png",
-  "/icon-mark.png",
-  "/logo.png",
-  "/logo-solid.png",
+  "/logo/ninety-nine-logo-full.png",
+  "/logo/ninety-nine-icon-mark.png",
 ];
 
 self.addEventListener("install", (event) => {
@@ -68,7 +66,7 @@ self.addEventListener("fetch", (event) => {
 });
 
 self.addEventListener("push", (event) => {
-  let title = "Platinum Rentals";
+  let title = "Ninety Nine Property Consultants";
   let body = "A new property has been listed.";
   let link = "/properties";
 

@@ -4,9 +4,9 @@ import HowItWorks from "@/components/HowItWorks";
 import LandlordCta from "@/components/LandlordCta";
 
 export const metadata: Metadata = {
-  title: "How It Works | Platinum Rentals",
+  title: "How It Works | Ninety Nine Property Consultants",
   description:
-    "From property review to ongoing management — the four-step process landlords go through when they hand their property to Platinum Rentals.",
+    "Two documented paths — how landlords hand their property to Ninety Nine Property Consultants for management, and how buyers acquire verified land with clear title.",
 };
 
 export default function HowItWorksPage() {
@@ -14,8 +14,8 @@ export default function HowItWorksPage() {
     <main>
       <PageHero
         eyebrow="How It Works"
-        title="Four steps from handover to hands-off"
-        description="A real, documented sequence — not an open-ended arrangement. Here's exactly what happens from the first site visit to your first monthly statement."
+        title="Clear steps for landlords — and for land buyers"
+        description="Two documented sequences, not open-ended arrangements. Here's exactly what happens when you hand over your property for management — or when you buy verified land through us."
       />
       <HowItWorks />
       <LandlordCta />

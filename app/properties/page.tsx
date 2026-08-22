@@ -9,7 +9,7 @@ export default function PropertiesPage() {
       {/* <PageHero
         eyebrow="Properties"
         title="Available rental properties across Kampala"
-        description="Browse our current listings. Each property is managed end-to-end by Platinum Rentals — tenant sourcing, rent collection, inspections, and maintenance."
+        description="Browse our current listings. Each property is managed end-to-end by Ninety Nine Property Consultants — tenant sourcing, rent collection, inspections, and maintenance."
       /> */}
 
       <section className="px-4 pb-16 pt-4 sm:px-6 lg:px-10">
@@ -24,7 +24,7 @@ export default function PropertiesPage() {
               >
                 Looking for something specific?{" "}
                 <a
-                  href="https://wa.me/256785175160?text=Hello%20Platinum%20Rentals%2C%20I%27m%20looking%20for%20a%20specific%20property."
+                  href="https://wa.me/256785175160?text=Hello%20Ninety%20Nine%20Property%20Consultants%2C%20I%27m%20looking%20for%20a%20specific%20property."
                   target="_blank"
                   rel="noopener noreferrer"
                   className="font-semibold underline underline-offset-2 transition-colors hover:opacity-80"

@@ -32,7 +32,13 @@ export default async function FounderDetailPage({
         <div className="surface-raised-lg overflow-hidden rounded-3xl">
           <div className="flex flex-col items-center p-10 sm:p-12">
             <div className="relative h-48 w-48 overflow-hidden rounded-full sm:h-56 sm:w-56">
-              <Image src={founder.image} alt={founder.name} fill className="object-cover" />
+              <Image
+                src={founder.image}
+                alt={founder.name}
+                fill
+                sizes="(min-width: 640px) 224px, 192px"
+                className="object-cover"
+              />
             </div>
 
             <h1 className="mt-6 text-3xl font-extrabold sm:text-4xl">{founder.name}</h1>

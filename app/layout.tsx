@@ -19,28 +19,29 @@ const manrope = Manrope({
 });
 
 export const metadata: Metadata = {
-  title: "Platinum Rentals | Property Management in Kampala, Uganda",
+  title: "Ninety Nine Property Consultants | Rental Management & Land Sales in Kampala, Uganda",
   description:
-    "Platinum Rentals gives Kampala landlords a professional, transparent alternative to informal caretaker management — tenant sourcing, rent collection, inspections and maintenance, all reported digitally.",
+    "Ninety Nine Property Consultants gives Kampala landlords a professional, transparent alternative to informal caretaker management — tenant sourcing, rent collection, inspections and maintenance, all reported digitally, plus verified land for sale.",
   keywords: [
     "property management Kampala",
     "rental management Uganda",
+    "land sales Kampala",
+    "land for sale Uganda",
     "landlord services Kampala",
     "tenant sourcing Uganda",
     "rent collection Kampala",
   ],
   openGraph: {
-    title: "Platinum Rentals | Property Management in Kampala, Uganda",
+    title: "Ninety Nine Property Consultants | Rental Management & Land Sales in Kampala, Uganda",
     description:
-      "Managing your property like it's our own — tenant sourcing, rent collection, inspections and maintenance for landlords across Greater Kampala.",
-    url: "https://www.platinumrentals.ug",
-    siteName: "Platinum Rentals",
+      "Managing your property like it's our own — tenant sourcing, rent collection, inspections and maintenance for landlords, and verified land for sale across Greater Kampala.",
+    url: "https://www.ninetyninepropertyconsultants.ug",
+    siteName: "Ninety Nine Property Consultants",
     type: "website",
   },
   icons: {
     icon: [
       { url: "/favicons/favicon.ico", sizes: "any" },
-      { url: "/favicons/favicon.svg", type: "image/svg+xml" },
       { url: "/favicons/favicon-16x16.png", sizes: "16x16", type: "image/png" },
       { url: "/favicons/favicon-32x32.png", sizes: "32x32", type: "image/png" },
       { url: "/favicons/favicon-48x48.png", sizes: "48x48", type: "image/png" },
@@ -53,11 +54,11 @@ export const metadata: Metadata = {
   appleWebApp: {
     capable: true,
     statusBarStyle: "default",
-    title: "Platinum Rentals",
+    title: "Ninety Nine Property Consultants",
   },
   other: {
     "mobile-web-app-capable": "yes",
-    "theme-color": "#bf1a2c",
+    "theme-color": "#be1d2c",
   },
 };
 

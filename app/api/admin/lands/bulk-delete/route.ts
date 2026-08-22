@@ -1,0 +1,13 @@
+import { NextResponse } from "next/server";
+import { db } from "@/lib/db";
+import { land } from "@/lib/db-schema";
+import { inArray } from "drizzle-orm";
+
+export async function POST(request: Request) {
+  const { ids } = await request.json();
+  if (!Array.isArray(ids) || ids.length === 0) {
+    return NextResponse.json({ error: "No IDs provided" }, { status: 400 });
+  }
+  await db().delete(land).where(inArray(land.id, ids));
+  return NextResponse.json({ deleted: ids.length });
+}

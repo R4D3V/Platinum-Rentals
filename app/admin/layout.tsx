@@ -12,11 +12,13 @@ import {
   ArrowLeft,
   Loader2,
   ShieldCheck,
+  Map,
 } from "lucide-react";
 
 const SIDEBAR_LINKS = [
   { label: "Dashboard", href: "/admin", icon: LayoutDashboard },
   { label: "Properties", href: "/admin/properties", icon: Building2 },
+  { label: "Land", href: "/admin/lands", icon: Map },
   { label: "Users", href: "/admin/users", icon: Users },
 ];
 

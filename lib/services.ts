@@ -7,6 +7,8 @@ import {
   ScrollText,
   Scale,
   Home,
+  MapPinned,
+  SearchCheck,
   type LucideIcon,
 } from "lucide-react";
 
@@ -72,7 +74,7 @@ export const SERVICES: Service[] = [
       "Monthly collection via mobile money and bank transfer, with automated tenant reminders.",
     overview: [
       "Chasing rent is the part of self-management most landlords dread. We remove it entirely. Tenants pay through mobile money or bank transfer on a fixed schedule, with automated reminders sent ahead of the due date so payment becomes routine rather than a monthly negotiation.",
-      "All rent is received into a dedicated client account, kept separate from Platinum Rentals' own operating funds, and remitted to you on the agreed schedule alongside a clear statement of what was collected.",
+      "All rent is received into a dedicated client account, kept separate from Ninety Nine Property Consultants' own operating funds, and remitted to you on the agreed schedule alongside a clear statement of what was collected.",
     ],
     included: [
       "Mobile money and bank transfer collection channels",
@@ -292,6 +294,72 @@ export const SERVICES: Service[] = [
       {
         q: "Can a unit switch between long-term and short-let?",
         a: "Yes, this is something we can plan for during onboarding depending on your goals for the property.",
+      },
+    ],
+  },
+  {
+    slug: "verified-land-sales",
+    title: "Verified Land for Sale",
+    icon: MapPinned,
+    tagline: "Land with clear title, verified before it's ever listed.",
+    summary:
+      "Residential, commercial, and agricultural plots — each vetted for clear title and ready for transfer.",
+    overview: [
+      "Buying land in Uganda can be risky when the title isn't clear. That's why we only list plots we have personally vetted — every property is checked for ownership, encumbrances, and readiness for transfer before it ever reaches our listings.",
+      "We curate residential, commercial, and agricultural plots across Greater Kampala and beyond, help arrange viewings, and stand behind every listing we put our name to, so you buy with confidence rather than hope.",
+    ],
+    included: [
+      "Curated residential, commercial, and agricultural plots",
+      "Title and ownership verification before listing",
+      "Viewing coordination with the seller",
+      "Clear documentation of the plot's status before transfer",
+    ],
+    idealFor: [
+      "Buyers looking for land with verified, clear title",
+      "Diaspora investors who can't travel to inspect plots themselves",
+      "Anyone who's seen land deals go wrong because the title wasn't properly checked",
+    ],
+    faqs: [
+      {
+        q: "Is every listed plot verified?",
+        a: "Yes. We carry out title and ownership checks before a plot is listed, so the status you see is the status we've already confirmed.",
+      },
+      {
+        q: "Do you help with the transfer after I choose a plot?",
+        a: "We guide you through the transfer process and connect you with the right professionals to complete it — see Land Title & Due Diligence for the full detail.",
+      },
+    ],
+  },
+  {
+    slug: "land-title-due-diligence",
+    title: "Land Title & Due Diligence",
+    icon: SearchCheck,
+    tagline: "Verify before you buy — never risk your money on an unclear title.",
+    summary:
+      "Title searches, ownership verification, and transfer guidance for buyers and landowners.",
+    overview: [
+      "The single biggest cause of land loss in Uganda is buying a plot whose title has an unresolved history — boundary disputes, multiple owners, or a document that doesn't match the person selling it. We carry out structured due diligence on any plot before a purchase moves forward.",
+      "This covers the title search, ownership verification, and guidance through the transfer process, so you know exactly what you're buying and what it takes to complete the transaction lawfully.",
+    ],
+    included: [
+      "Title search and ownership history review",
+      "Verification of the seller's identity and legal right to sell",
+      "Site and boundary inspection support",
+      "Step-by-step guidance through the transfer process",
+    ],
+    idealFor: [
+      "Buyers acquiring land who want the title independently verified",
+      "Diaspora investors purchasing remotely",
+      "Landowners who want to confirm their own documents are in order before selling",
+    ],
+    faqs: [
+      {
+        q: "How long does due diligence take?",
+        a: "It depends on the plot's history, but a standard verification can usually be completed within a short window — we keep you updated at every stage.",
+      },
+      {
+        q: "Can you check a plot I've already found myself?",
+        a: "Yes. We can carry out due diligence on any plot, whether it's one of our listings or one you've sourced independently.",
       },
     ],
   },

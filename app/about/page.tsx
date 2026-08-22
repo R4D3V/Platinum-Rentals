@@ -10,7 +10,7 @@ const STATS = [
   { label: "Founded", value: "2026" },
   { label: "Headquarters", value: "Kampala, Uganda" },
   { label: "Coverage", value: "Greater Kampala" },
-  { label: "Focus", value: "Residential & Commercial" },
+  { label: "Focus", value: "Rentals & Land Sales" },
 ];
 
 const VALUES = [
@@ -53,13 +53,13 @@ export default function AboutPage() {
             <div>
               <h2 className="text-2xl font-extrabold sm:text-3xl">Who We Are</h2>
               <p className="mt-5 text-base leading-relaxed sm:text-lg" style={{ color: "var(--color-ink-soft)" }}>
-                Platinum Rentals is a Kampala-based rental property management company offering landlords a professional, transparent, and technology-enabled alternative to informal caretaker-based management.
+                Ninety Nine Property Consultants is a Kampala-based property consultancy specialising in rental property management and the sale of verified land — offering landlords a professional, transparent alternative to informal caretaker-based management.
               </p>
               <p className="mt-4 text-base leading-relaxed" style={{ color: "var(--color-ink-soft)" }}>
-                We manage residential and commercial rental properties on behalf of individual landlords, diaspora investors, and small institutional owners across the Greater Kampala Metropolitan Area.
+                We manage residential and commercial rental properties on behalf of individual landlords, diaspora investors, and small institutional owners across the Greater Kampala Metropolitan Area — and we help buyers acquire verified land with clear title, ready for transfer.
               </p>
               <p className="mt-4 text-base leading-relaxed" style={{ color: "var(--color-ink-soft)" }}>
-                We exist because most Ugandan landlords are still forced to choose between managing property themselves or trusting an informal caretaker with little accountability. Platinum Rentals gives landlords a third option: a dedicated team, documented processes, and digital reporting — without the overhead of building an in-house management function.
+                We exist because most Ugandan landlords are still forced to choose between managing property themselves or trusting an informal caretaker with little accountability. Ninety Nine Property Consultants gives landlords a third option: a dedicated team, documented processes, and digital reporting — without the overhead of building an in-house management function.
               </p>
             </div>
           </FadeIn>
@@ -101,7 +101,7 @@ export default function AboutPage() {
                 </div>
                 <h3 className="text-lg font-bold">Vision</h3>
                 <p className="mt-3 text-base leading-relaxed" style={{ color: "var(--color-ink-soft)" }}>
-                  To become the most trusted rental property management brand in Uganda, known for integrity, reliability, and modern service delivery.
+                  To become the most trusted property consultancy in Uganda, known for integrity, reliability, and modern service delivery across rental management and land transactions.
                 </p>
               </div>
             </FadeIn>
@@ -113,7 +113,7 @@ export default function AboutPage() {
                 </div>
                 <h3 className="text-lg font-bold">Mission</h3>
                 <p className="mt-3 text-base leading-relaxed" style={{ color: "var(--color-ink-soft)" }}>
-                  To give landlords peace of mind and tenants a fair, professional renting experience by managing rental properties with transparency, accountability, and consistent maintenance standards.
+                  To give landlords peace of mind and tenants a fair, professional renting experience — and to help buyers secure verified land with confidence — through transparency, accountability, and consistent service standards.
                 </p>
               </div>
             </FadeIn>

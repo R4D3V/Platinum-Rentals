@@ -100,10 +100,30 @@ export const property = pgTable("property", {
   landlordId: text("landlord_id").references(() => user.id),
 });
 
+export const land = pgTable("land", {
+  id: text("id").primaryKey(),
+  landId: text("land_id").notNull().unique(),
+  title: text("title").notNull(),
+  landType: text("land_type").notNull(),
+  price: integer("price").notNull(),
+  size: integer("size").notNull(),
+  location: text("location").notNull(),
+  area: text("area").notNull(),
+  description: text("description").notNull(),
+  features: text("features").array().notNull(),
+  status: text("status").notNull().default("Available"),
+  titleDocument: text("title_document").notNull().default("Freehold"),
+  gradient: text("gradient").notNull(),
+  images: text("images").array().default([]).notNull(),
+  featured: boolean("featured").default(false).notNull(),
+  landlordId: text("landlord_id").references(() => user.id),
+});
+
 export const userRelations = relations(user, ({ many }) => ({
   sessions: many(session),
   accounts: many(account),
   properties: many(property),
+  lands: many(land),
 }));
 
 export const sessionRelations = relations(session, ({ one }) => ({
@@ -139,6 +159,13 @@ export const notification = pgTable("notification", {
 export const propertyRelations = relations(property, ({ one }) => ({
   landlord: one(user, {
     fields: [property.landlordId],
+    references: [user.id],
+  }),
+}));
+
+export const landRelations = relations(land, ({ one }) => ({
+  landlord: one(user, {
+    fields: [land.landlordId],
     references: [user.id],
   }),
 }));

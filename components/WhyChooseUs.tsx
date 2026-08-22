@@ -8,6 +8,8 @@ import {
   Smartphone,
   Globe,
   X,
+  MapPinned,
+  SearchCheck,
 } from "lucide-react";
 import FadeIn from "@/components/FadeIn";
 
@@ -16,7 +18,7 @@ const REASONS = [
     icon: ShieldCheck,
     title: "Ring-fenced client account",
     detail:
-      "Rent is held in a dedicated client account, separate from Platinum Rentals' own operating funds — your money is never mixed with company cash flow.",
+      "Rent is held in a dedicated client account, separate from Ninety Nine Property Consultants' own operating funds — your money is never mixed with company cash flow.",
   },
   {
     icon: FileBarChart,
@@ -48,15 +50,27 @@ const REASONS = [
     detail:
       "Digital, remote-friendly reporting means owners based outside Uganda stay fully informed without needing to be physically present.",
   },
+  {
+    icon: MapPinned,
+    title: "Verified land, only",
+    detail:
+      "Every plot we list passes title and ownership checks before it ever goes live — you buy with confidence, not hope.",
+  },
+  {
+    icon: SearchCheck,
+    title: "Structured due diligence",
+    detail:
+      "Title searches, boundary inspection, and transfer guidance mean your land purchase is documented, lawful, and ready to complete.",
+  },
 ];
 
 const COMPARISON = [
-  { label: "Written management agreement", caretaker: false, platinum: true },
-  { label: "Rent held in a separate client account", caretaker: false, platinum: true },
-  { label: "Itemised monthly statement", caretaker: false, platinum: true },
-  { label: "Documented move-in / move-out condition", caretaker: false, platinum: true },
-  { label: "Vetted maintenance network with cost oversight", caretaker: false, platinum: true },
-  { label: "Structured arrears follow-up process", caretaker: false, platinum: true },
+  { label: "Written management agreement", caretaker: false, ninetyNine: true },
+  { label: "Rent held in a separate client account", caretaker: false, ninetyNine: true },
+  { label: "Itemised monthly statement", caretaker: false, ninetyNine: true },
+  { label: "Documented move-in / move-out condition", caretaker: false, ninetyNine: true },
+  { label: "Vetted maintenance network with cost oversight", caretaker: false, ninetyNine: true },
+  { label: "Structured arrears follow-up process", caretaker: false, ninetyNine: true },
 ];
 
 export default function WhyChooseUs() {
@@ -67,11 +81,11 @@ export default function WhyChooseUs() {
           <FadeIn direction="left">
             <div className="surface-raised-lg relative flex items-center justify-center rounded-3xl p-10 sm:p-14">
               <Image
-                src="/icon-mark.png"
-                alt="Platinum Rentals mark"
+                src="/logo/ninety-nine-icon-mark.png"
+                alt="Ninety Nine Property Consultants mark"
                 width={280}
                 height={200}
-                className="h-auto w-40 opacity-90 sm:w-56"
+                className="h-auto w-40 rounded-2xl bg-white p-2 opacity-90 sm:w-56"
               />
             </div>
           </FadeIn>
@@ -80,9 +94,10 @@ export default function WhyChooseUs() {
             <div>
               <p className="max-w-lg text-base leading-relaxed" style={{ color: "var(--color-ink-soft)" }}>
                 Most Ugandan landlords choose between managing property themselves or trusting an
-                informal caretaker with little accountability. Platinum Rentals is the third option:
+                informal caretaker with little accountability. Ninety Nine Property Consultants is the third option:
                 a dedicated team, documented processes, and digital reporting, without the overhead
-                of building an in-house management function.
+                of building an in-house management function. For land buyers, every title is verified
+                before it's ever listed — so your money only ever moves on a plot we've already cleared.
               </p>
             </div>
           </FadeIn>
@@ -117,7 +132,7 @@ export default function WhyChooseUs() {
                 The Difference
               </span>
               <h2 className="mt-3 text-2xl font-extrabold sm:text-3xl">
-                Informal caretaker vs. Platinum Rentals
+                Informal caretaker vs. Ninety Nine
               </h2>
             </div>
           </FadeIn>
@@ -127,7 +142,7 @@ export default function WhyChooseUs() {
               <div className="grid grid-cols-[1.6fr_1fr_1fr] gap-2 border-b p-5 text-xs font-semibold uppercase tracking-wide sm:p-6" style={{ borderColor: "var(--color-shadow-dark)", color: "var(--color-ink-faint)" }}>
                 <span />
                 <span className="text-center">Caretaker</span>
-                <span className="text-center" style={{ color: "var(--color-accent)" }}>Platinum Rentals</span>
+                <span className="text-center" style={{ color: "var(--color-accent)" }}>Ninety Nine</span>
               </div>
               {COMPARISON.map((row, i) => (
                 <div

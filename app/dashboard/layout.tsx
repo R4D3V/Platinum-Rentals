@@ -11,11 +11,13 @@ import {
   ArrowLeft,
   Loader2,
   User,
+  Map,
 } from "lucide-react";
 
 const SIDEBAR_LINKS = [
   { label: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
   { label: "My Listings", href: "/dashboard/properties", icon: Building2 },
+  { label: "My Land", href: "/dashboard/lands", icon: Map },
 ];
 
 export default function DashboardLayout({

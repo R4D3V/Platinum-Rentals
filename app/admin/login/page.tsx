@@ -44,14 +44,14 @@ export default function AdminLoginPage() {
                     Sign In
                   </h1>
                   <p className="mt-4 max-w-sm text-base leading-relaxed" style={{ color: "rgba(255,255,255,0.7)" }}>
-                    Secure access for Platinum Rentals operations, property management, and reporting tools.
+                    Secure access for Ninety Nine Property Consultants operations, property management, and reporting tools.
                   </p>
                 </div>
 
                 <div className="mt-12 hidden lg:block">
                   <Image
-                    src="/logo/platinum-rentals-logo-full.svg"
-                    alt="Platinum Rentals"
+                    src="/logo/ninety-nine-logo-full.png"
+                    alt="Ninety Nine Property Consultants"
                     width={168}
                     height={76}
                     className="h-12 w-auto rounded-xl bg-white p-2"

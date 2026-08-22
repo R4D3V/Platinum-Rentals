@@ -9,10 +9,11 @@ import {
   Shield,
   ShieldCheck,
   Building2,
+  Map,
   Pencil,
   Trash2,
 } from "lucide-react";
-import type { Property } from "@/lib/data";
+import type { Property, Land } from "@/lib/data";
 import { fetcher } from "@/lib/fetcher";
 
 interface UserInfo {
@@ -35,13 +36,23 @@ export default function UserDetailPage({
     `/api/admin/users/${id}/properties`,
     fetcher,
   );
+  const { data: lands = [], isLoading: landsLoading, mutate: mutateLands } = useSWR<Land[]>(
+    `/api/admin/users/${id}/lands`,
+    fetcher,
+  );
   const user = users.find((u) => u.id === id) ?? null;
-  const loading = isLoading;
+  const loading = isLoading || landsLoading;
 
   async function handleDelete(propertyId: string, title: string) {
     if (!confirm(`Delete "${title}"? This cannot be undone.`)) return;
     await fetch(`/api/admin/properties/${propertyId}`, { method: "DELETE" });
     mutate();
+  }
+
+  async function handleDeleteLand(landId: string, title: string) {
+    if (!confirm(`Delete "${title}"? This cannot be undone.`)) return;
+    await fetch(`/api/admin/lands/${landId}`, { method: "DELETE" });
+    mutateLands();
   }
 
   if (loading) {
@@ -169,6 +180,87 @@ export default function UserDetailPage({
                         </Link>
                         <button
                           onClick={() => handleDelete(p.id, p.title)}
+                          className="icon-chip flex items-center gap-1.5 rounded-xl px-3 py-1.5 text-xs font-semibold"
+                          style={{ color: "#dc2626" }}
+                        >
+                          <Trash2 size={13} />
+                          Delete
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
+      </div>
+
+      <div className="mt-10">
+        <h2 className="flex items-center gap-2 text-lg font-extrabold">
+          <Map size={18} style={{ color: "var(--color-accent)" }} />
+          Land Listings ({lands.length})
+        </h2>
+
+        {lands.length === 0 ? (
+          <p className="mt-4 text-sm" style={{ color: "var(--color-ink-faint)" }}>
+            This user has no land listings.
+          </p>
+        ) : (
+          <div className="mt-4 overflow-x-auto">
+            <table className="w-full text-left text-sm">
+              <thead>
+                <tr style={{ color: "var(--color-ink-faint)" }}>
+                  <th className="pb-3 pr-4 font-semibold">ID</th>
+                  <th className="pb-3 pr-4 font-semibold">Title</th>
+                  <th className="pb-3 pr-4 font-semibold">Type</th>
+                  <th className="pb-3 pr-4 font-semibold">Size</th>
+                  <th className="pb-3 pr-4 font-semibold">Price</th>
+                  <th className="pb-3 pr-4 font-semibold">Area</th>
+                  <th className="pb-3 pr-4 font-semibold">Status</th>
+                  <th className="pb-3 font-semibold">Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {lands.map((l) => (
+                  <tr
+                    key={l.id}
+                    className="border-t"
+                    style={{ borderColor: "var(--color-shadow-dark)" }}
+                  >
+                    <td className="py-3 pr-4 font-mono text-xs">{l.landId}</td>
+                    <td className="py-3 pr-4 font-medium">{l.title}</td>
+                    <td className="py-3 pr-4" style={{ color: "var(--color-ink-soft)" }}>{l.landType}</td>
+                    <td className="py-3 pr-4" style={{ color: "var(--color-ink-soft)" }}>{l.size} dec</td>
+                    <td className="py-3 pr-4 whitespace-nowrap" style={{ color: "var(--color-ink-soft)" }}>
+                      UGX {(l.price / 1000000).toFixed(1)}M
+                    </td>
+                    <td className="py-3 pr-4" style={{ color: "var(--color-ink-soft)" }}>{l.area}</td>
+                    <td
+                      className="py-3 pr-4 font-semibold"
+                      style={{
+                        color:
+                          l.status === "Available"
+                            ? "var(--color-accent)"
+                            : l.status === "Sold"
+                              ? "#059669"
+                              : "#d97706",
+                      }}
+                    >
+                      {l.status}
+                    </td>
+                    <td className="py-3">
+                      <div className="flex gap-2">
+                        <Link
+                          href={`/admin/lands/${l.id}`}
+                          className="icon-chip flex items-center gap-1.5 rounded-xl px-3 py-1.5 text-xs font-semibold"
+                          style={{ color: "var(--color-ink-soft)" }}
+                        >
+                          <Pencil size={13} />
+                          Edit
+                        </Link>
+                        <button
+                          onClick={() => handleDeleteLand(l.id, l.title)}
                           className="icon-chip flex items-center gap-1.5 rounded-xl px-3 py-1.5 text-xs font-semibold"
                           style={{ color: "#dc2626" }}
                         >

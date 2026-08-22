@@ -5,10 +5,10 @@ import FadeIn from "@/components/FadeIn";
 
 const LINKS = [
   { label: "About", href: "/about" },
+  { label: "Contact", href: "/contact" },
   { label: "Services", href: "/services" },
   { label: "Why Us", href: "/why-us" },
   { label: "How It Works", href: "/how-it-works" },
-  { label: "Contact", href: "/contact" },
   { label: "Install App", href: "/install" },
 ];
 
@@ -20,17 +20,18 @@ export default function Footer() {
           <div className="grid gap-10 sm:grid-cols-3">
             <div>
               <Image
-                src="/logo/platinum-rentals-logo-full.svg"
-                alt="Platinum Rentals"
+                src="/logo/ninety-nine-logo-full.png"
+                alt="Ninety Nine Property Consultants"
                 width={168}
                 height={76}
-                className="h-12 w-auto"
+                className="brand-logo-invert h-12 w-auto"
               />
               <p
                 className="mt-4 max-w-xs text-sm leading-relaxed"
                 style={{ color: "var(--color-ink-faint)" }}
               >
-                A Kampala-based rental property management company offering
+                A Kampala-based property consultancy specialising in rental
+                property management and the sale of verified land — offering
                 landlords a professional, transparent alternative to informal
                 caretaker-based management.
               </p>
@@ -80,8 +81,11 @@ export default function Footer() {
                   style={{ color: "var(--color-ink-soft)" }}
                 >
                   <Mail size={15} style={{ color: "var(--color-accent)" }} />{" "}
-                  <a href="mailto:info@platinumrentals.ug" className="hover:underline">
-                    info@platinumrentals.ug
+                  <a
+                    href="mailto:info@ninetyninepropertyconsultants.ug"
+                    className="hover:underline"
+                  >
+                    info@ninetyninepropertyconsultants.ug
                   </a>
                 </li>
                 <li
@@ -103,7 +107,7 @@ export default function Footer() {
             }}
           >
             <p>
-              &copy; {new Date().getFullYear()} Platinum Rentals. All rights
+              &copy; {new Date().getFullYear()} Ninety Nine Property Consultants. All rights
               reserved.
             </p>
             <p>

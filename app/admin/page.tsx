@@ -1,7 +1,7 @@
 import { db } from "@/lib/db";
-import { property, user } from "@/lib/db-schema";
-import { count, eq, sql } from "drizzle-orm";
-import { Building2, Users, Home, Tag } from "lucide-react";
+import { property, user, land } from "@/lib/db-schema";
+import { count, eq } from "drizzle-orm";
+import { Building2, Users, Home, Tag, Map } from "lucide-react";
 
 async function getStats() {
   const [propertyCount] = await db()
@@ -18,12 +18,16 @@ async function getStats() {
     .select({ value: count() })
     .from(property)
     .where(eq(property.status, "Let"));
+  const [landCount] = await db()
+    .select({ value: count() })
+    .from(land);
 
   return {
     totalProperties: propertyCount.value,
     totalUsers: userCount.value,
     availableProperties: availableCount.value,
     letProperties: letCount.value,
+    totalLands: landCount.value,
   };
 }
 
@@ -31,6 +35,7 @@ const statCards = [
   { label: "Total Properties", key: "totalProperties", icon: Building2 },
   { label: "Available", key: "availableProperties", icon: Home },
   { label: "Let", key: "letProperties", icon: Tag },
+  { label: "Land Listings", key: "totalLands", icon: Map },
   { label: "Total Users", key: "totalUsers", icon: Users },
 ] as const;
 
@@ -44,7 +49,7 @@ export default async function AdminPage() {
         Overview of your property listings and users
       </p>
 
-      <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+      <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
         {statCards.map((card) => {
           const Icon = card.icon;
           const value = stats[card.key as keyof typeof stats];

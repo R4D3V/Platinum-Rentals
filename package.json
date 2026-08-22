@@ -1,5 +1,5 @@
 {
-  "name": "platinum-rentals",
+  "name": "ninety-nine-property-consultants",
   "version": "1.0.0",
   "private": true,
   "scripts": {
@@ -8,6 +8,7 @@
     "start": "next start",
     "lint": "next lint",
     "db:generate": "drizzle-kit generate",
+    "db:migrate": "drizzle-kit migrate",
     "db:push": "drizzle-kit push --force",
     "db:studio": "drizzle-kit studio",
     "db:drop": "drizzle-kit drop",

@@ -1,10 +1,10 @@
 @import "tailwindcss";
 
 /* ---------------------------------------------------------------
-   PLATINUM RENTALS — design tokens
+   NINETY NINE PROPERTY CONSULTANTS — design tokens
    Colorful Glassmorphism system: frosted, translucent surfaces
    floating over a soft animated bokeh backdrop. Brand red
-   (#BF1B2C) is joined by a jewel-toned accent chord (violet,
+   (#BE1D2C) is joined by a jewel-toned accent chord (violet,
    sky, amber) sampled into the bokeh field so every glass panel
    picks up a wash of ambient color from behind it.
 ----------------------------------------------------------------*/
@@ -21,7 +21,7 @@
   --color-ink-soft: #4b4f66;
   --color-ink-faint: #7b7f99;
 
-  --color-accent: #bf1b2c;
+  --color-accent: #be1d2c;
   --color-accent-deep: #8f1420;
   --color-accent-soft: #f9dde1;
 
@@ -106,6 +106,11 @@ body {
 h1, h2, h3, h4, h5, h6 {
   font-family: var(--font-display);
   letter-spacing: -0.01em;
+}
+
+/* Monochrome brand logo on dark surfaces (footer, static panels) */
+html.dark .brand-logo-invert {
+  filter: brightness(0) invert(1);
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -233,11 +238,11 @@ html.dark .bokeh-blob {
     backdrop-filter: blur(16px) saturate(180%);
     -webkit-backdrop-filter: blur(16px) saturate(180%);
     border: 1px solid rgba(255, 255, 255, 0.35);
-    box-shadow: 0 8px 26px rgba(191, 27, 44, 0.38), inset 0 1px 0 rgba(255,255,255,0.5);
+    box-shadow: 0 8px 26px rgba(190, 29, 44, 0.38), inset 0 1px 0 rgba(255,255,255,0.5);
     transition: box-shadow 150ms ease, transform 150ms ease, background-color 0.3s ease;
   }
   .btn-neu-accent:hover {
-    box-shadow: 0 12px 34px rgba(191, 27, 44, 0.46), inset 0 1px 0 rgba(255,255,255,0.55);
+    box-shadow: 0 12px 34px rgba(190, 29, 44, 0.46), inset 0 1px 0 rgba(255,255,255,0.55);
     transform: translateY(-1px);
   }
   .btn-neu-accent:active {
@@ -256,7 +261,7 @@ html.dark .bokeh-blob {
   .input-neu:focus {
     outline: none;
     border-color: var(--color-accent);
-    box-shadow: var(--shadow-pressed), 0 0 0 3px rgba(191, 27, 44, 0.18);
+    box-shadow: var(--shadow-pressed), 0 0 0 3px rgba(190, 29, 44, 0.18);
   }
 
   .icon-chip {

@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
-import { ArrowLeft, Lock, Mail, Shield } from "lucide-react";
+import { ArrowLeft, Eye, EyeOff, Lock, Mail, Shield } from "lucide-react";
 import { signIn } from "@/lib/auth-client";
 import FadeIn from "@/components/FadeIn";
 
@@ -14,6 +14,7 @@ export default function SignInPage() {
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -69,14 +70,14 @@ export default function SignInPage() {
                       style={{ color: "rgba(255,255,255,0.7)" }}
                     >
                       Sign in to manage properties, tenants, and listings on
-                      Platinum Rentals.
+                      Ninety Nine Property Consultants.
                     </p>
                   </div>
 
                   <div className="mt-12 hidden lg:block">
                     <Image
-                      src="/logo/platinum-rentals-logo-full.svg"
-                      alt="Platinum Rentals"
+                      src="/logo/ninety-nine-logo-full.png"
+                      alt="Ninety Nine Property Consultants"
                       width={168}
                       height={76}
                       className="h-12 w-auto rounded-xl bg-white p-2"
@@ -150,13 +151,22 @@ export default function SignInPage() {
                           <Lock size={18} />
                         </span>
                         <input
-                          type="password"
+                          type={showPassword ? "text" : "password"}
                           required
                           value={password}
                           onChange={(e) => setPassword(e.target.value)}
                           placeholder="••••••••"
-                          className="input-neu w-full rounded-2xl py-4 pl-12 pr-4 text-sm"
+                          className="input-neu w-full rounded-2xl py-4 pl-12 pr-12 text-sm"
                         />
+                        <button
+                          type="button"
+                          onClick={() => setShowPassword((v) => !v)}
+                          aria-label={showPassword ? "Hide password" : "Show password"}
+                          className="absolute right-4 top-1/2 -translate-y-1/2 transition hover:opacity-70"
+                          style={{ color: "var(--color-ink-faint)" }}
+                        >
+                          {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                        </button>
                       </div>
                     </div>
 

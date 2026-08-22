@@ -51,7 +51,7 @@ export default function HomeExplore() {
               Explore
             </span>
             <h2 className="mt-3 text-3xl font-extrabold sm:text-4xl">
-              Get to know Platinum Rentals
+              Get to know Ninety Nine
             </h2>
           </div>
         </FadeIn>

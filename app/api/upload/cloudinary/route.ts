@@ -20,7 +20,7 @@ export async function POST(request: Request) {
 
   return new Promise<Response>((resolve) => {
     const uploadStream = cloudinary.uploader.upload_stream(
-      { folder: "platinum-rentals" },
+      { folder: "ninety-nine-property-consultants" },
       (error, result) => {
         if (error) {
           resolve(

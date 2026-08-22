@@ -36,7 +36,7 @@ authenticated users instead and pointed `proxy.ts` at that.
 ### 1. Create the Neon database (5 min)
 
 1. Go to [console.neon.tech](https://console.neon.tech) → **New Project** → name it
-   `platinum-rentals`.
+   `ninety-nine-property-consultants`.
 2. Open **Connection Details** and copy the **pooled** connection string (it has
    `-pooler` in the hostname).
 

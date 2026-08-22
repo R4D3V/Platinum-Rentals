@@ -1,6 +1,7 @@
 import Hero from "@/components/Hero";
 import TrustBar from "@/components/TrustBar";
 import FeaturedProperties from "@/components/FeaturedProperties";
+import FeaturedLands from "@/components/FeaturedLands";
 
 
 import WhyChooseHome from "@/components/WhyChooseHome";
@@ -16,6 +17,7 @@ export default function Home() {
       <Hero />
       <TrustBar />
       <FeaturedProperties />
+      <FeaturedLands />
 
 
       <WhyChooseHome />

@@ -3,9 +3,9 @@ import PageHero from "@/components/PageHero";
 import Contact from "@/components/Contact";
 
 export const metadata: Metadata = {
-  title: "Contact | Platinum Rentals",
+  title: "Contact | Ninety Nine Property Consultants",
   description:
-    "Get in touch with Platinum Rentals — Kampala property management. Call, WhatsApp, or send an enquiry and we'll respond within one business day.",
+    "Get in touch with Ninety Nine Property Consultants — Kampala property management and land sales. Call, WhatsApp, or send an enquiry and we'll respond within one business day.",
 };
 
 export default async function ContactPage({
