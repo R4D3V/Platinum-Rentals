@@ -4,6 +4,7 @@ import { auth } from "@/lib/auth";
 import { db } from "@/lib/db";
 import { property } from "@/lib/db-schema";
 import { eq } from "drizzle-orm";
+import { revalidateListings } from "@/lib/revalidate";
 
 export async function GET(
   _request: Request,
@@ -73,6 +74,7 @@ export async function PUT(
     .where(eq(property.id, id))
     .returning();
 
+  revalidateListings("property", id);
   return NextResponse.json(row[0]);
 }
 
@@ -97,5 +99,6 @@ export async function DELETE(
   }
 
   await db().delete(property).where(eq(property.id, id));
+  revalidateListings("property", id);
   return NextResponse.json({ deleted: true });
 }

@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { db } from "@/lib/db";
 import { property } from "@/lib/db-schema";
 import { sendPushNotifications } from "@/lib/notifications";
+import { revalidateListings } from "@/lib/revalidate";
 
 export const revalidate = 30;
 
@@ -53,6 +54,8 @@ export async function POST(request: Request) {
     .returning();
 
   const created = row[0];
+
+  revalidateListings("property", created.id);
 
   try {
     await sendPushNotifications(

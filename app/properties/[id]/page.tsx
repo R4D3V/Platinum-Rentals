@@ -24,6 +24,8 @@ import {
 import { WHATSAPP_NUMBER } from "@/lib/whatsapp";
 import { notFound } from "next/navigation";
 
+export const revalidate = 60;
+
 export async function generateStaticParams() {
   const all = await getAllProperties();
   return all.map((p) => ({ id: p.id }));

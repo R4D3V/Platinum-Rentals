@@ -5,6 +5,7 @@ import { db } from "@/lib/db";
 import { land } from "@/lib/db-schema";
 import { eq } from "drizzle-orm";
 import { sendPushNotifications } from "@/lib/notifications";
+import { revalidateListings } from "@/lib/revalidate";
 
 export async function GET() {
   const session = await auth.api.getSession({ headers: await headers() });
@@ -65,6 +66,8 @@ export async function POST(request: Request) {
     .returning();
 
   const created = row[0];
+
+  revalidateListings("land", created.id);
 
   try {
     await sendPushNotifications(

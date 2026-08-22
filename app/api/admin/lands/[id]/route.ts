@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { db } from "@/lib/db";
 import { land } from "@/lib/db-schema";
 import { eq } from "drizzle-orm";
+import { revalidateListings } from "@/lib/revalidate";
 
 export async function GET(
   _request: Request,
@@ -49,6 +50,7 @@ export async function PUT(
   if (!row[0]) {
     return NextResponse.json({ error: "Not found" }, { status: 404 });
   }
+  revalidateListings("land", id);
   return NextResponse.json(row[0]);
 }
 
@@ -64,5 +66,6 @@ export async function DELETE(
   if (!row[0]) {
     return NextResponse.json({ error: "Not found" }, { status: 404 });
   }
+  revalidateListings("land", id);
   return NextResponse.json({ deleted: true });
 }

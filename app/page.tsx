@@ -11,6 +11,8 @@ import Stats from "@/components/Stats";
 import Testimonials from "@/components/Testimonials";
 import FinalCta from "@/components/FinalCta";
 
+export const revalidate = 60;
+
 export default function Home() {
   return (
     <main>

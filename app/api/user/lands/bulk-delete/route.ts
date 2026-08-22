@@ -4,6 +4,7 @@ import { auth } from "@/lib/auth";
 import { db } from "@/lib/db";
 import { land } from "@/lib/db-schema";
 import { inArray, and, eq } from "drizzle-orm";
+import { revalidateListings } from "@/lib/revalidate";
 
 export async function POST(request: Request) {
   const session = await auth.api.getSession({ headers: await headers() });
@@ -21,5 +22,6 @@ export async function POST(request: Request) {
     .where(
       and(inArray(land.id, ids), eq(land.landlordId, session.user.id)),
     );
+  revalidateListings("land", ...ids);
   return NextResponse.json({ deleted: ids.length });
 }
