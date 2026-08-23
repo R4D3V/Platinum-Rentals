@@ -1,5 +1,4 @@
 import Link from "next/link";
-import Image from "next/image";
 import {
   ArrowLeft,
   MapPin,
@@ -56,14 +55,12 @@ export default async function LandDetailPage({
   const similar = await getSimilarLands(land);
 
   const landUrl = `${process.env.NEXT_PUBLIC_APP_URL}/land/${land.id}`;
-  const thumbnailUrl = land.images[0] ?? null;
 
   const whatsappMessage = encodeURIComponent(
     [
       `Hello Ninety Nine Property Consultants, I'm interested in the land: ${land.title} (${land.area}). Is it still available?`,
       "",
       `Land Link: ${landUrl}`,
-      ...(thumbnailUrl ? [`Thumbnail: ${thumbnailUrl}`] : []),
     ].join("\n"),
   );
 
@@ -253,42 +250,16 @@ export default async function LandDetailPage({
 
             {land.status === "Available" && (
               <FadeIn direction="right" delay={150}>
-                <div className="surface-raised-lg sticky top-24 hidden overflow-hidden rounded-3xl sm:block">
-                  {/* Thumbnail */}
-                  {thumbnailUrl && (
-                    <div className="relative h-44 w-full overflow-hidden">
-                      <Image
-                        src={thumbnailUrl}
-                        alt={land.title}
-                        fill
-                        sizes="(max-width: 1024px) 50vw, 33vw"
-                        className="object-cover"
-                        priority
-                      />
-                      {/* Overlay label */}
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
-                      <span className="absolute bottom-3 left-3 rounded-full bg-white/20 px-3 py-1 text-xs font-semibold text-white backdrop-blur-sm">
-                        {land.landType} · {land.area}
-                      </span>
-                    </div>
-                  )}
-                  <div className="p-6 sm:p-8">
-                    <p className="mb-4 text-sm font-semibold" style={{ color: "var(--color-ink)" }}>
-                      {land.title}
-                    </p>
-                    <a
-                      href={`https://wa.me/${WHATSAPP_NUMBER}?text=${whatsappMessage}`}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="btn-neu-accent flex w-full items-center justify-center gap-2 rounded-2xl py-3.5 text-sm font-bold tracking-wide text-white"
-                    >
-                      <MessageCircle size={18} />
-                      Contact for Viewing
-                    </a>
-                    <p className="mt-3 text-center text-xs" style={{ color: "var(--color-ink-faint)" }}>
-                      Opens WhatsApp with listing details
-                    </p>
-                  </div>
+                <div className="surface-raised-lg sticky top-24 rounded-3xl p-6 sm:p-8 hidden sm:block">
+                  <a
+                    href={`https://wa.me/${WHATSAPP_NUMBER}?text=${whatsappMessage}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="btn-neu-accent flex w-full items-center justify-center gap-2 rounded-2xl py-3.5 text-sm font-bold tracking-wide text-white"
+                  >
+                    <MessageCircle size={18} />
+                    Contact for Viewing
+                  </a>
                 </div>
               </FadeIn>
             )}
@@ -403,43 +374,21 @@ export default async function LandDetailPage({
       {/* Sticky Mobile CTA */}
       {land.status === "Available" && (
         <div
-          className="fixed bottom-0 left-0 right-0 z-50 border-t p-3 backdrop-blur-xl sm:hidden"
+          className="fixed bottom-0 left-0 right-0 z-50 border-t p-4 backdrop-blur-xl sm:hidden"
           style={{
             backgroundColor: "rgba(var(--glass-tint), 0.95)",
             borderColor: "var(--glass-border)",
           }}
         >
-          <div className="flex items-center gap-3">
-            {/* Mini thumbnail */}
-            {thumbnailUrl && (
-              <div className="relative h-12 w-12 shrink-0 overflow-hidden rounded-xl">
-                <Image
-                  src={thumbnailUrl}
-                  alt={land.title}
-                  fill
-                  sizes="48px"
-                  className="object-cover"
-                />
-              </div>
-            )}
-            <div className="min-w-0 flex-1">
-              <p className="truncate text-xs font-semibold" style={{ color: "var(--color-ink)" }}>
-                {land.title}
-              </p>
-              <p className="truncate text-[10px]" style={{ color: "var(--color-ink-faint)" }}>
-                {land.area} · {land.landType}
-              </p>
-            </div>
-            <a
-              href={`https://wa.me/${WHATSAPP_NUMBER}?text=${whatsappMessage}`}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="btn-neu-accent flex shrink-0 items-center gap-2 rounded-2xl px-4 py-3 text-sm font-bold tracking-wide text-white"
-            >
-              <MessageCircle size={16} />
-              Contact
-            </a>
-          </div>
+          <a
+            href={`https://wa.me/${WHATSAPP_NUMBER}?text=${whatsappMessage}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="btn-neu-accent flex w-full items-center justify-center gap-2 rounded-2xl py-3.5 text-sm font-bold tracking-wide text-white"
+          >
+            <MessageCircle size={18} />
+            Contact for Viewing
+          </a>
         </div>
       )}
     </main>
