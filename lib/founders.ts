@@ -5,9 +5,9 @@ export interface Founder {
   image: string;
   description: string;
   social: {
-    instagram: string;
+    // instagram: string;
     whatsapp: string;
-    tiktok: string;
+    // tiktok: string;
   };
 }
 
@@ -15,14 +15,27 @@ export const FOUNDERS: Founder[] = [
   {
     id: 1,
     name: "Hussein W",
-    role: "CEO & Co-Founder",
+    role: "Co-Founder",
     image: "/images/founder-1.png",
     description:
       "With over a decade of experience in property management and real estate development, Hussein leads the company's strategic vision and operations.",
     social: {
-      instagram: "https://instagram.com/",
+      // instagram: "https://instagram.com/",
       whatsapp: "https://wa.me/256785175160",
-      tiktok: "https://tiktok.com/@",
+      // tiktok: "https://tiktok.com/@",
+    },
+  },
+  {
+    id: 2,
+    name: "Mrs Hussein W",
+    role: "CEO",
+    image: "/images/founder-2.png",
+    description:
+      "As Chief Executive Officer, Mrs Hussein oversees the company's day-to-day operations and client relations, combining strong leadership with a passion for delivering exceptional rental experiences.",
+    social: {
+      // instagram: "https://instagram.com/",
+      whatsapp: "https://wa.me/256785175160",
+      // tiktok: "https://tiktok.com/@",
     },
   },
 ];

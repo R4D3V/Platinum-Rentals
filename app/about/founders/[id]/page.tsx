@@ -41,7 +41,9 @@ export default async function FounderDetailPage({
               />
             </div>
 
-            <h1 className="mt-6 text-3xl font-extrabold sm:text-4xl">{founder.name}</h1>
+            <h1 className="mt-6 text-3xl font-extrabold sm:text-4xl">
+              {founder.name}
+            </h1>
             <p
               className="mt-1 text-sm font-semibold"
               style={{ color: "var(--color-accent)" }}
@@ -57,7 +59,7 @@ export default async function FounderDetailPage({
             </p>
 
             <div className="mt-8 flex items-center gap-4">
-              <a
+              {/* <a
                 href={founder.social.instagram}
                 target="_blank"
                 rel="noopener noreferrer"
@@ -66,7 +68,7 @@ export default async function FounderDetailPage({
               >
                 <Camera size={18} />
                 Instagram
-              </a>
+              </a> */}
               <a
                 href={founder.social.whatsapp}
                 target="_blank"
@@ -77,7 +79,7 @@ export default async function FounderDetailPage({
                 <Globe size={18} />
                 WhatsApp
               </a>
-              <a
+              {/* <a
                 href={founder.social.tiktok}
                 target="_blank"
                 rel="noopener noreferrer"
@@ -86,7 +88,7 @@ export default async function FounderDetailPage({
               >
                 <Music2 size={18} />
                 TikTok
-              </a>
+              </a> */}
             </div>
           </div>
         </div>
