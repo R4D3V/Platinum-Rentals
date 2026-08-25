@@ -14,7 +14,7 @@ export interface Founder {
 export const FOUNDERS: Founder[] = [
   {
     id: 1,
-    name: "Walusimbi Hussein",
+    name: "Hussein W",
     role: "Co-Founder",
     image: "/images/founder-1.png",
     description:
