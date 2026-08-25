@@ -2,8 +2,8 @@ import Hero from "@/components/Hero";
 import TrustBar from "@/components/TrustBar";
 import FeaturedProperties from "@/components/FeaturedProperties";
 import FeaturedLands from "@/components/FeaturedLands";
+import ServicesShowcase from "@/components/ServicesShowcase";
 import CompanyGallery from "@/components/CompanyGallery";
-
 
 import WhyChooseHome from "@/components/WhyChooseHome";
 import LandlordCta from "@/components/LandlordCta";
@@ -21,9 +21,8 @@ export default function Home() {
       <TrustBar />
       <FeaturedProperties />
       <FeaturedLands />
+      <ServicesShowcase />
       <CompanyGallery />
-
-
       <WhyChooseHome />
       <LandlordCta />
       <ExploreAreasHome />
